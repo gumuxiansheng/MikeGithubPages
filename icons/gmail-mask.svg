@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<svg
+width="100%" hight="100%" id="Layer_1" version="1.1" viewBox="0 0 24 24" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <g>
+        <path d="M 22 3 H 2 C 0.9 3 0 3.9 0 5 v 14 c 0 1.1 0.9 2 2 2 h 20 c 1.1 0 2 -0.9 2 -2 V 5 C 24 3.9 23.1 3 22 3 z" fill="#f2f2f2" />
+        <path d="M 3 21 h 19 c 1.1 0 2 -0.9 2 -2 V 5.1 L 3 21 z" fill="#f5f5f5" />
+        <linearGradient gradientUnits="userSpaceOnUse" id="SVGID_1_" x1="7.9155107" x2="19.1802444" y1="10.4586535" y2="15.7114859">
+            <stop offset="0" style="stop-color: #FFFFFF; stop-opacity: 0.2" />
+            <stop offset="1" style="stop-color: #FFFFFF; stop-opacity: 0" />
+        </linearGradient>
+        <polygon fill="url(#SVGID_1_)" points="3,21 3.3,21 24,5.4 24,5.1" />
+        <path d="M 0 5.1 V 19 c 0 1.1 0.9 2 2 2 h 1 V 7.3 C 1.3 6.1 0.9 5.8 0 5.1 z" fill="#d32f2f" />
+        <path d="M 21 7.3 V 21 h 1 c 1.1 0 2 -0.9 2 -2 V 5.1 L 21 7.3 z" fill="#d32f2f" />
+        <linearGradient gradientUnits="userSpaceOnUse" id="SVGID_2_" x1="18.8903751" x2="26.6321716" y1="9.4531202" y2="17.1949158">
+            <stop offset="0" style="stop-color: #000000; stop-opacity: 0.1" />
+            <stop offset="1" style="stop-color: #000000; stop-opacity: 0" />
+        </linearGradient>
+        <path d="M 21 7.3 V 21 h 1 c 1.1 0 2 -0.9 2 -2 V 5.1 L 21 7.3 z" fill="url(#SVGID_2_)" />
+        <polygon fill="#f5f5f5" points="21.5,3 2.5,3 12,10.3" />
+        <path d="M 24 5.1 V 5 c 0 -1.1 -0.9 -2 -2 -2 h -0.5 L 12 10.3 L 2.5 3 H 2 C 0.9 3 0 3.9 0 5 v 0.1 l 12 9.1 L 24 5.1 z" fill="#d32f2f" />
+        <linearGradient gradientUnits="userSpaceOnUse" id="SVGID_3_" x1="1.5279056" x2="21.46105" y1="1.2802522" y2="10.5752296">
+            <stop offset="0" style="stop-color: #FFFFFF; stop-opacity: 0.1" />
+            <stop offset="1" style="stop-color: #FFFFFF; stop-opacity: 0" />
+        </linearGradient>
+        <path d="M 24 5.1 V 5 c 0 -1.1 -0.9 -2 -2 -2 h -0.5 L 12 10.3 L 2.5 3 H 2 C 0.9 3 0 3.9 0 5 v 0.1 l 12 9.1 L 24 5.1 z" fill="url(#SVGID_3_)" />
+        <path d="M 12 13.9 L 0 4.9 C 0 4.9 0 5 0 5 v 0.1 l 12 9.1 l 12 -9.1 V 5 c 0 0 0 -0.1 0 -0.1 L 12 13.9 z" opacity="0.1" />
+        <path d="M 22 20.8 H 2 c -1.1 0 -2 -0.9 -2 -2 V 19 c 0 1.1 0.9 2 2 2 h 20 c 1.1 0 2 -0.9 2 -2 v -0.3 C 24 19.9 23.1 20.8 22 20.8 z" opacity="0.1" />
+        <linearGradient gradientUnits="userSpaceOnUse" id="SVGID_4_" x1="23.7147064" x2="23.9944" y1="4.1656036" y2="4.4452972">
+            <stop offset="0" style="stop-color: #000000; stop-opacity: 0.1" />
+            <stop offset="1" style="stop-color: #000000; stop-opacity: 0" />
+        </linearGradient>
+        <path d="M 23.8 4.1 L 23.8 4.1 c 0.1 0.1 0.1 0.3 0.2 0.4 C 23.9 4.4 23.8 4.2 23.8 4.1 z" fill="url(#SVGID_4_)" />
+        <linearGradient gradientUnits="userSpaceOnUse" id="SVGID_5_" x1="23.8411255" x2="24.1003418" y1="4.6404419" y2="4.8996582">
+            <stop offset="0" style="stop-color: #000000; stop-opacity: 0.1" />
+            <stop offset="1" style="stop-color: #000000; stop-opacity: 0" />
+        </linearGradient>
+        <path d="M 23.9 4.5 C 24 4.7 24 4.8 24 5 C 24 4.8 24 4.7 23.9 4.5 z" fill="url(#SVGID_5_)" />
+        <linearGradient gradientUnits="userSpaceOnUse" id="SVGID_6_" x1="6.5011444" x2="25.3809357" y1="-0.4336395" y2="18.4461517">
+            <stop offset="0" style="stop-color: #000000; stop-opacity: 0.1" />
+            <stop offset="1" style="stop-color: #000000; stop-opacity: 0" />
+        </linearGradient>
+        <path d="M 0.5 5.5 L 16 21 h 6 c 1.1 0 2 -0.9 2 -2 V 5.1 l -12 9.1 L 0.5 5.5 z" fill="url(#SVGID_6_)" />
+        <path d="M 22 3 H 2 C 0.9 3 0 3.9 0 5 v 0.3 c 0 -1.1 0.9 -2 2 -2 h 20 c 1.1 0 2 0.9 2 2 V 5 C 24 3.9 23.1 3 22 3 z" fill="#ffffff" opacity="0.2" />
+        <linearGradient gradientUnits="userSpaceOnUse" id="SVGID_7_" x1="-0.7076151" x2="24.7076149" y1="6.0743418" y2="17.9256592">
+            <stop offset="0" style="stop-color: #FFFFFF; stop-opacity: 0.1" />
+            <stop offset="1" style="stop-color: #FFFFFF; stop-opacity: 0" />
+        </linearGradient>
+        <path d="M 22 3 H 2 C 0.9 3 0 3.9 0 5 v 14 c 0 1.1 0.9 2 2 2 h 20 c 1.1 0 2 -0.9 2 -2 V 5 C 24 3.9 23.1 3 22 3 z" fill="url(#SVGID_7_)" />
+    </g>
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+</svg>
