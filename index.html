@@ -84,10 +84,11 @@
     }
 
     .waves {
+      position: absolute;
       left: 0;
       top: 0;
       right: 0;
-      bottom: 0;
+      z-index: 0;
     }
   </style>
 </head>
@@ -95,27 +96,28 @@
 <body>
 
   <!-- HEADER -->
+  <div class="waves"></div>
   <div id="header_wrap" class="outer">
-    <div class="waves">
-      <header class="inner">
 
-        <h1 id="project_title">Mike Zhu's Homepage</h1>
-        <h2 id="project_tagline">Hello World!</h2>
+    <header class="inner">
 
-        <div class="social-links">
-          <a class="link" href="https://github.com/gumuxiansheng" data-title="github.com/gumuxiansheng">
-            <img class="icon" src="icons/github-mask.svg" width="50" height="50" />
-          </a>
-          <a class="link" href="https://leetcode.com/gumuxiansheng/" data-title="leetcode.com/gumuxiansheng">
-            <img class="icon" src="icons/leetcode-mask.svg" width="50" height="50" />
-          </a>
-          <a class="link" href="https://www.kaggle.com/gumuxiansheng" data-title="kaggle.com/gumuxiansheng">
-            <img class="icon" src="icons/kaggle-mask.svg" width="50" height="50" />
-          </a>
-        </div>
+      <h1 id="project_title">Mike Zhu's Homepage</h1>
+      <h2 id="project_tagline">Hello World!</h2>
 
-      </header>
-    </div>
+      <div class="social-links">
+        <a class="link" href="https://github.com/gumuxiansheng" data-title="github.com/gumuxiansheng">
+          <img class="icon" src="icons/github-mask.svg" width="50" height="50" />
+        </a>
+        <a class="link" href="https://leetcode.com/gumuxiansheng/" data-title="leetcode.com/gumuxiansheng">
+          <img class="icon" src="icons/leetcode-mask.svg" width="50" height="50" />
+        </a>
+        <a class="link" href="https://www.kaggle.com/gumuxiansheng" data-title="kaggle.com/gumuxiansheng">
+          <img class="icon" src="icons/kaggle-mask.svg" width="50" height="50" />
+        </a>
+      </div>
+
+    </header>
+  </div>
   </div>
 
   <!-- MAIN CONTENT -->
@@ -275,7 +277,7 @@
         const gl = this.gl
 
         const width = this.width = holder.offsetWidth
-        const height = this.height = holder.offsetHeight
+        const height = this.height = document.getElementById("header_wrap").offsetHeight
         const aspect = this.aspect = width / height
         const dpi = this.dpi = devicePixelRatio
 
@@ -621,7 +623,7 @@
       uniforms: {
         size: { type: 'float', value: pointSize },
         field: { type: 'vec3', value: [0, 0, 0] },
-        speed: { type: 'float', value: 5 },
+        speed: { type: 'float', value: 6 },
       },
       vertex: `
           #define M_PI 3.1415926535897932384626433832795
