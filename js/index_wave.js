@@ -486,7 +486,7 @@ class ShaderProgram {
     uniforms: {
       size: { type: 'float', value: pointSize },
       field: { type: 'vec3', value: [0, 0, 0] },
-      speed: { type: 'float', value: 9.7 },
+      speed: { type: 'float', value: 8 },
     },
     vertex: `
         #define M_PI 3.1415926535897932384626433832795
