@@ -22,6 +22,60 @@
 {"headline":"Test Github Page","@type":"WebPage","url":"https://gumuxiansheng.github.io/mikezhu.github.io/docs/Test.html","description":"Mike Zhu’s Homepage","@context":"http://schema.org"}</script>
   <!-- End Jekyll SEO tag -->
 
+  <style>
+    .social-links>.link {
+      margin: 0;
+      text-decoration: none;
+      position: relative;
+      display: inline-block;
+      z-index: 100;
+      font-weight: 700;
+      border-bottom-left-radius: 2px;
+      border-bottom-right-radius: 2px;
+    }
+
+    .social-links>.link:hover {
+      background-color: yellow;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .social-links>.link:before {
+      content: attr(data-title);
+      display: inline-block;
+      position: absolute;
+      bottom: -34px;
+      left: -6px;
+      margin: 0 auto;
+      font-size: 13px;
+      padding: 3px 10px;
+      background: #222;
+      color: #fff;
+      border-radius: 2px;
+      height: 22px;
+      line-height: 22px;
+      opacity: 0;
+      transition: opacity 150ms linear, transform 150ms linear, -webkit-transform 150ms linear;
+      transform: translate3d(0, -8px, 0);
+      z-index: 99;
+    }
+
+    .social-links>.link:after {
+      content: "";
+      position: absolute;
+      top: 35px;
+      left: 13px;
+      width: 0;
+      height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-bottom: 6px solid #222;
+      opacity: 0;
+      transition: opacity 150ms linear, transform 150ms linear, -webkit-transform 150ms linear;
+      transform: translate3d(0, -8px, 0);
+      z-index: 100;
+    }
+
+  </style>
 </head>
 
 <body>
@@ -29,17 +83,27 @@
   <!-- HEADER -->
   <div id="header_wrap" class="outer">
     <header class="inner">
-      <a id="forkme_banner" href="https://github.com/gumuxiansheng/mikezhu.github.io">View on GitHub</a>
 
       <h1 id="project_title">Mike Zhu's Homepage</h1>
       <h2 id="project_tagline">Hello World!</h2>
 
+      <div class="social-links">
+        <a class="link" href="https://github.com/gumuxiansheng" data-title="github.com/gumuxiansheng">
+          <img src="icons/gitHub.svg" width="50" height="50"/>
+        </a>
+        <a class="link" href="https://leetcode.com/gumuxiansheng/" data-title="leetcode.com/gumuxiansheng">
+          <img src="icons/leetcode.svg" width="50" height="50"/>
+        </a>
+        <a class="link" href="https://www.kaggle.com/gumuxiansheng" data-title="kaggle.com/gumuxiansheng">
+          <img src="icons/kaggle.svg" width="50" height="50"/>
+        </a>
+      </div>
 
     </header>
   </div>
 
   <!-- MAIN CONTENT -->
-  
+
 
   <!-- FOOTER  -->
   <div id="footer_wrap" class="outer">
