@@ -16,15 +16,13 @@ if __name__ == '__main__':
 ```
 
 ## 流程图
-```flow
-st=>start: Start
-op=>operation: Your Operation
-cond=>condition: Yes or No?
-e=>end
-
-st->op->cond
-cond(yes)->e
-cond(no)->op
+```mermaid
+graph sequenceDiagram
+A->> B: Query
+B->> C: Forward query
+Note right of C: Thinking...
+C->> B: Response
+B->> A: Forward response
 ```
 
 ## 绘制表格
