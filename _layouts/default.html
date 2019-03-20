@@ -97,7 +97,7 @@
         for (i = 0; i < x.length; i++) {
             var innerText = x[i].innerHTML;
             var y = x[i].parentNode;
-            y.removeChild();
+            y.removeChild(x[i]);
             var divEle = document.createElement("div");
             divEle.className="mermaid";
             divEle.innerHTML = innerText;
