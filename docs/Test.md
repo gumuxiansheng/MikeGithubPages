@@ -17,7 +17,7 @@ if __name__ == '__main__':
 
 ## 流程图
 ```mermaid
-graph sequenceDiagram
+sequenceDiagram
 A->> B: Query
 B->> C: Forward query
 Note right of C: Thinking...
