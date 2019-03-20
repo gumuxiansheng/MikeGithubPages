@@ -95,12 +95,12 @@
         var x = document.getElementsByClassName("language-mermaid");
         var i;
         for (i = 0; i < x.length; i++) {
-            var innerText = x[i].innerHTML;
+            var innerText = x[i].innerText;
             var y = x[i].parentNode;
             y.removeChild(x[i]);
             var divEle = document.createElement("div");
             divEle.className="mermaid";
-            divEle.innerHTML = innerText;
+            divEle.innerText = innerText;
             y.appendChild(divEle);
         }
     </script>
