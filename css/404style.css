@@ -344,11 +344,7 @@ body {
 }
 
 #text--hint{
-  position: absolute;
-  text-align: center;
-  left: 0;
-  right: 0;
-  bottom: 76%;
-  font-size: 0.7em;
+  margin-top: 1em;
+  font-size: 0.2em;
   color: darkgrey;
 }
