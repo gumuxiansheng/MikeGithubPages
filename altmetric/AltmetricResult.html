@@ -1,0 +1,100 @@
+<!Doctype html>
+<html xmlns=http://www.w3.org/1999/xhtml> <head>
+<meta http-equiv=Content-Type content="text/html;charset=utf-8">
+<meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1">
+<meta content=always name=referrer>
+<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+<script>
+    function syntaxHighlight(json) {
+        if (typeof json != 'string') {
+            json = JSON.stringify(json, undefined, 2);
+        }
+        json = json.replace(/&/g, '&').replace(/</g, '<').replace(/>/g, '>');
+        return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+            var cls = 'number';
+            if (/^"/.test(match)) {
+                if (/:$/.test(match)) {
+                    cls = 'key';
+                } else {
+                    cls = 'string';
+                }
+            } else if (/true|false/.test(match)) {
+                cls = 'boolean';
+            } else if (/null/.test(match)) {
+                cls = 'null';
+            }
+            return '<span class="' + cls + '">' + match + '</span>';
+        });
+    }
+
+</script>
+<style>
+    pre {
+        outline: 1px solid #ccc;
+        padding: 5px;
+        margin: 5px;
+    }
+
+    .string {
+        color: green;
+    }
+
+    .number {
+        color: darkorange;
+    }
+
+    .boolean {
+        color: blue;
+    }
+
+    .null {
+        color: magenta;
+    }
+
+    .key {
+        color: red;
+    }
+
+</style>
+<title>Altmetric Result </title>
+</head>
+
+<body>
+    <h1 id="title">Search for: </h1>
+    <h2>Plumx</h2>
+    <div id="plumx_container"></div>
+    <hr style="border-top:4px solid black;" />
+    <h2>altmetric.com</h2>
+    <div id="altmetric_dot_com_container"></div>
+    <hr style="border-top:4px solid black;" />
+    <h2>PLOS ALM</h2>
+    <div id="plos_alm_container"></div>
+    <hr style="border-top:4px solid black;" />
+    <h2>Crossref</h2>
+    <div id="crossref_eventdata_container"></div>
+    <hr style="border-top:4px solid black;" />
+    <h2>Datacite</h2>
+    <div id="datacite_eventdata_container"></div>
+
+    <script>
+        $('#title').append(localStorage.searchType + '=' + localStorage.doi);
+        $('#plumx_container').empty().append('<a href="https://plu.mx/plum/a/?doi=' + localStorage.doi + '" class="plumx-details"></a>');
+        $.get("https://api.altmetric.com/v1/doi/" + localStorage.doi + "?jsoncallback=?", function (data) {
+            $('#altmetric_dot_com_container').html('<pre>' + syntaxHighlight(JSON.stringify(data, null, 4)) + '<\/pre>');
+        });
+        $('#plos_alm_container').html('please referrer to <a href="https://journals.plos.org/plosone/article/metrics?id=' + encodeURI(localStorage.doi) + '" target="_blank">Plos website<\/a>');
+
+        // $.get("https://api.crossref.org/v1/works/" + localStorage.doi, function (data) {
+        //     $('#crossref_eventdata_container').html('<pre>' + syntaxHighlight(JSON.stringify(data, null, 4)) + '<\/pre>');
+        // });
+        $.get("http://api.eventdata.crossref.org/v1/events?obj-id=https://doi.org/" + localStorage.doi, function (data) {
+            $('#crossref_eventdata_container').html('<pre>' + syntaxHighlight(JSON.stringify(data, null, 4)) + '<\/pre>');
+        });
+        $.get("https://api.datacite.org/dois/" + localStorage.doi, function (data) {
+            $('#datacite_eventdata_container').html('<pre>' + syntaxHighlight(JSON.stringify(data, null, 4)) + '<\/pre>');
+        });
+
+    </script>
+    <div id="plumx_script_container"></div>
+    <script type="text/javascript" src="//cdn.plu.mx/widget-details.js"></script>
+</body>
