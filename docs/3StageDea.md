@@ -41,7 +41,7 @@ $$
     s_{ik}=f^{i}(\boldsymbol{z}_{k}; \boldsymbol{\beta}_{i}) + v_{ik} + u_{ik}
 $$
 
-其中$s_{ik}$是第一阶段第$k$个决策单元第$i$项投入的差额量，$$\boldsymbol{z}_{k}$$表示环境变量，$v_{ik}$代表影响生产活动的随机因素，$$v_{ik} \sim N(0, \sigma_{v_{ik}}^{2})$，$f^{i}(\boldsymbol{z}_{k}) + v_{ik}$$代表随机前沿生产函数；$u_{ik}$（非负）体现了生产无效率，一般假设它是独立同分布的半正态随机变量（$u_{ik} \sim N^{+}(0, \sigma_{u_{ik}}^{2})$）独立于$v_{ik}$。$v_{ik} + u_{ik}$为复合误差项，SFA过程得到的残差值就是两项之和，根据两个变量的分布假设，利用极大似然法可以求出$v_{ik}$和$u_{ik}$分别的值。本文根据罗登跃（2012）指出的三阶段DEA复合误差项分离公式求解：
+其中$s_{ik}$是第一阶段第$k$个决策单元第$i$项投入的差额量，$$\boldsymbol{z}_{k}$$表示环境变量，$v_{ik}$代表影响生产活动的随机因素，$$v_{ik} \sim N(0, \sigma_{v_{ik}}^{2})$$，$$f^{i}(\boldsymbol{z}_{k}) + v_{ik}$$代表随机前沿生产函数；$u_{ik}$（非负）体现了生产无效率，一般假设它是独立同分布的半正态随机变量（$u_{ik} \sim N^{+}(0, \sigma_{u_{ik}}^{2})$）独立于$v_{ik}$。$v_{ik} + u_{ik}$为复合误差项，SFA过程得到的残差值就是两项之和，根据两个变量的分布假设，利用极大似然法可以求出$v_{ik}$和$u_{ik}$分别的值。本文根据罗登跃（2012）指出的三阶段DEA复合误差项分离公式求解：
 
 $$
 E\left(u_{ik} | \varepsilon_{ik}\right)=\frac{\lambda_{k} \sigma_{k}}{1+\lambda_{k}^{2}}\left[\frac{\phi\left(\varepsilon_{ik} \lambda_{k} / \sigma_{k}\right)}{\Phi\left(\varepsilon_{ik} \lambda_{k} / \sigma_{k}\right)}+\frac{\varepsilon_{ik} \lambda_{k}}{\sigma_{k}}\right]
