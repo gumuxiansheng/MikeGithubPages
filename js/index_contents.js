@@ -20,20 +20,28 @@ function modifyList() {
     $ = cheerio.load(content);
     let dom = $('#contents');
     dom.empty();
-    let ul = `<ol class="container"></ol>`;
+    let ul = `<ol id="ol_container" class="container"></ol>`;
     dom.append(ul);
-    let container = $('.container');
+    let container = $('#ol_container');
 
 
     list.forEach((item, index) => {
         let p = path.join('./docs/', item);
         let markdown = fs.readFileSync(p).toString();
 
-        let title = markdown.split('\n')[0].replace('# ', '');
+        let markdownLines = markdown.split('\n');
+        let title = markdownLines[0].replace('# ', '');
         console.log('title Out: ' + title);
         let url = `${baseUrl}${item.substring(0, item.length - 3)}`;
         let li = `<li><a href=${url}>${title}</a></li>\n`;
+        
         container.append(li);
+        if (markdownLines.length > 1 && markdownLines[1].startsWith('<!--')){
+            let abstruct = markdownLines[1].replace('<!--', '').replace('-->', '');
+            let li_abs = `<div class="li_inline">${abstruct}</div>\n`;
+            container.append(li_abs);
+        }
+        
     });
 
     fs.writeFile('./index.html', $.html(), function () { });
