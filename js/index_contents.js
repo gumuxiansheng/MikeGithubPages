@@ -36,7 +36,7 @@ function modifyList() {
         
         if (markdownLines.length > 2 && markdownLines[2].startsWith('<!--')){
             let timestamp = markdownLines[2].replace('<!--', '').replace('-->', '');
-            let li = `<li><a href=${url}>${title}</a><font size='2' color='#888888'>&nbsp;&nbsp;&nbsp;&nbsp;${timestamp}</font></li>\n`;
+            let li = `<li><a href=${url}>${title}</a><font size='2' color='#888888'>&nbsp;${timestamp}</font></li>\n`;
             container.append(li);
         } else {
             let li = `<li><a href=${url}>${title}</a></li>\n`;
