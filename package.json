@@ -1,0 +1,28 @@
+{
+  "name": "mikezhublog",
+  "version": "1.0.0",
+  "description": "mike zhu's blog",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "npm mikezhublog"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gumuxiansheng/gumuxiansheng.github.io.git"
+  },
+  "keywords": [
+    "Home"
+  ],
+  "author": "Mike Zhu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gumuxiansheng/gumuxiansheng.github.io/issues"
+  },
+  "homepage": "https://github.com/gumuxiansheng/gumuxiansheng.github.io#readme",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.2"
+  }
+}
