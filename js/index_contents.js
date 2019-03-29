@@ -33,14 +33,24 @@ function modifyList() {
         let title = markdownLines[0].replace('# ', '');
         console.log('title Out: ' + title);
         let url = `${baseUrl}${item.substring(0, item.length - 3)}`;
-        let li = `<li><a href=${url}>${title}</a></li>\n`;
         
-        container.append(li);
+        if (markdownLines.length > 2 && markdownLines[2].startsWith('<!--')){
+            let timestamp = markdownLines[2].replace('<!--', '').replace('-->', '');
+            let li = `<li><a href=${url}>${title}</a><font size='2' color='#888888'>&nbsp;&nbsp;&nbsp;&nbsp;${timestamp}</font></li>\n`;
+            container.append(li);
+        } else {
+            let li = `<li><a href=${url}>${title}</a></li>\n`;
+            container.append(li);
+        }
+
         if (markdownLines.length > 1 && markdownLines[1].startsWith('<!--')){
             let abstruct = markdownLines[1].replace('<!--', '').replace('-->', '');
             let li_abs = `<div class="li_inline">${abstruct}</div>\n`;
             container.append(li_abs);
         }
+
+
+        
         
     });
 
