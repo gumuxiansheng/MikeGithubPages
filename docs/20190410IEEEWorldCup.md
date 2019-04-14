@@ -467,7 +467,7 @@ def pic_scatter(index_files, category_name, index_file_url=corporation_index_fil
 
 ```
 
-下图中`co_industry_3`就是一个方差太小的列子，而`products_total`则观察不出目标分数与其关系.
+下图中`co_industry_3`就是一个方差太小的列子，而`products_total`则观察不出目标分数与其关系。
 ![co_industry_3](20190410IEEEWorldCup/img/co_industry_3.png)
 ![products_total](20190410IEEEWorldCup/img/products_total.png)
 
