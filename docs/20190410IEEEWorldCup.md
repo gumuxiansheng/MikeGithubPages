@@ -228,6 +228,15 @@ def fillna_with_values():
 
 同时，在格式统一的过程中我们注意到一些类别数据分类过多、过散、有重复，如‘作品著作权’表`作品著作权类别`就有`'A 文字'`, `'文字'`, `'文字作品'`这几种相同但表述不同的类别存在。于是，我们采取步骤将这些类别进行再分类，降低类别数。
 
+还有在一列里面有多组数据，比如‘年报-股东（发起人）及出资信息’表‘认缴出资信息’列数据包含三个信息：
+
+```
+认缴出资方式：货币
+认缴出资额（万元）：3945926.64万人民币
+认缴出资日期：2010-10-14
+```
+在这一步可以将这些信息展开。
+
 另外，还有一些明显的错误值需要处理，如股权比例有些数值小于0，而这在现实中不可能存在。对于这些数据，我们会将其标注成错误数据。
 
 一份完整的数据清洗示例如下。
@@ -375,7 +384,113 @@ def empty_value_handle_share_exchange_info():
     return
 ```
 
-## 特征提取
+## 特征工程
+
+### 特征提取
+
+我们拥有的是3000家企业的全量信息，而我们需要将这些信息综合成每家企业的若干特征。每一张表格中都可能提取出很多信息。在数据清洗后就可以开始特征提取的步骤，此时空值太多的数据已经被删除，不会对我们的分析有影响。
+
+特征的提取策略主要包括：
+
+1. 直接使用
+    对于一家公司对应一个值的指标，我们直接采用。如‘年报-企业基本信息’中的数据等等。
+2. 时间数据求增长率
+    有很多季度、年度数据，我们可以求其增长率。
+3. 计数
+    诸如‘专利’、‘作品著作权’等我们可以计算每家公司的总数、近N（N一般取1、3、5、10等）年来的总数。
+4. 类别计数
+    像‘资质认证’这种数据我们除了统计其计数外，也统计其覆盖的类别数。
+5. 加总
+    ‘购地类信息’很多需要加总，每家公司会有多次购地，其总购地面积可以作为一个指标。
+
+以上列出来的是我们提取指标中常用的一些方法，也有很多数据是多种方法结合提取的。
+
+提取完数据后需要将我们的指标能够被模型所用，所以还需要将所有指标数字化。
+
+至此，我们就形成了3000家公司多个特征，总共大概有300多个特征，高维度的数据会造成很多问题，我们并不能将所有特征全部用上，需要进行特征的选取。
+
+### 特征选择
+
+对特征的选择的依据首先是看这个特征的方差，如果这个特征方差太小，说明其差异不大，不太可能从中得到比较好的信息。另外，通过观察特征和最终目标分数之间的散点图可以看出两者是否存在关系。
+
+形成特征后就可以通过画图来直观体现特征的优劣。
+
+```python
+# Visualization
+import matplotlib.pyplot as plt
+
+# matplotlib inline
+plt.style.use('fivethirtyeight')
+plt.rcParams['font.size'] = 14
+plt.rcParams['patch.edgecolor'] = 'k'
+plt.rcParams['font.sans-serif'] = ['SimHei']  # 步骤一（替换sans-serif字体）
+plt.rcParams['axes.unicode_minus'] = False
+
+def pic_scatter(index_files, category_name, index_file_url=corporation_index_file_url,
+                scatter_url=corporation_index_scatter_file_url):
+    """
+    scatter picture for each index and the score.
+    :param index_files: the index file we need to analyse.
+    :param category_name: the category of the index, the images will be stored at this file folder.
+    :param index_file_url: file url to index files.
+    :param scatter_url: scatter image url to be stored.
+    :return:
+    """
+    fig = plt.figure(figsize=(14, 9))
+    for file_n in index_files:
+        print file_n
+        data_frame = fu.read_file_to_df(index_file_url, file_n + '_index')
+        for column in data_frame.columns:
+            if column == 'Unnamed: 0':
+                continue
+
+            plt.title(column)
+            plt.xlabel('score')
+            plt.ylabel(column)
+
+            x = data_frame['int_score'].to_list()
+            y = data_frame[column].to_list()
+            xy = list(zip(x, y))
+
+            s = []
+            c = np.random.rand(len(xy))
+            for xy_item in xy:
+                s.append(xy.count(xy_item) * 1.5)
+            plt.scatter(x, y, s=s, c=c)
+
+            # plt.show()
+
+            fig.savefig(fu.check_file_url(
+                scatter_url + '/' + category_name + '/' + file_n + '/') + str(column).replace('/', '-') + '.png',
+                        dpi=150)
+            plt.clf()
+
+```
+
+下图中`co_industry_3`就是一个方差太小的列子，而`products_total`则观察不出目标分数与其关系.
+![co_industry_3](20190410IEEEWorldCup/img/co_industry_3.png)
+![products_total](20190410IEEEWorldCup/img/products_total.png)
+
+要观察到特征和目标分数之间的关系，一般线性关系是最容易发现的，如下图中`certi_cat_total`就很好的体现了其与分数之间的关系。
+![certi_cat_total](20190410IEEEWorldCup/img/certi_cat_total.png)
+
+而其余的关系一般不如`certi_cat_total`这么明显，向下图`tra_mark_5`，但也能看出关系，这些需要保留。
+![tra_mark_5](20190410IEEEWorldCup/img/tra_mark_5.png)
+
+通过散点图对特征进行了初步筛选后，我们还需要进一步压缩维度。对于相关系数很高的特征，我们可以保留其中一个。这个我们可以通过热点图来直观体现。像下图专利相关特征的热点图。
+![专利](20190410IEEEWorldCup/img/专利.png)
+
+从上图中，我们可以从之前的13个指标中筛选出彼此相关系数不太高的5个指标：
+
+```
+'patent_count_2010-13',
+'patent_count_2018',
+'patent_count_pre_2001',
+'patent_count_total',
+'wg_patent_count'
+```
+
+通过这一步筛选，我们大致能避免多重共线性。
 
 ## 初步模型选取
 
