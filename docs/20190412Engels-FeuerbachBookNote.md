@@ -32,5 +32,5 @@
 
 ## 参考文献
 
-[^baike-ma]: https://baike.baidu.com/item/%E9%A9%AC%E5%85%8B%E6%80%9D%E4%B8%BB%E4%B9%89%E5%93%B2%E5%AD%A6/165367?fr=aladdin
-[^baike-fei]: https://baike.baidu.com/item/%E8%B7%AF%E5%BE%B7%E7%BB%B4%E5%B8%8C%C2%B7%E8%B4%B9%E5%B0%94%E5%B7%B4%E5%93%88%E5%92%8C%E5%BE%B7%E5%9B%BD%E5%8F%A4%E5%85%B8%E5%93%B2%E5%AD%A6%E7%9A%84%E7%BB%88%E7%BB%93/5425336?fr=aladdin
+[^baike-ma]: https://baike.baidu.com/item/马克思主义哲学/165367?fr=aladdin
+[^baike-fei]: https://baike.baidu.com/item/路德维希·费尔巴哈和德国古典哲学的终结?fr=aladdin
