@@ -228,129 +228,149 @@ def fillna_with_values():
 
 同时，在格式统一的过程中我们注意到一些类别数据分类过多、过散、有重复，如‘作品著作权’表`作品著作权类别`就有`'A 文字'`, `'文字'`, `'文字作品'`这几种相同但表述不同的类别存在。于是，我们采取步骤将这些类别进行再分类，降低类别数。
 
+另外，还有一些明显的错误值需要处理，如股权比例有些数值小于0，而这在现实中不可能存在。对于这些数据，我们会将其标注成错误数据。
+
 一份完整的数据清洗示例如下。
 
 ```python
-def empty_value_handle_basic_info():
+def drop_unit_with_transfer(file_name, column_name, unit_strs, transfer_map, empty_mask='Unknown',
+                            file_url=clean_data_temp_file_url, dst_file_url=clean_data_temp_file_url):
     """
-    empty_value handle for table 年报-企业基本信息.
-        Dirty value handle for table 年报-企业基本信息.
+
+    :type transfer_map: dict
+    :type unit_strs: list
+    """
+    data_frame = file_utils.read_file_to_df(file_url, file_name)
+    for index in range(0, len(data_frame)):
+        content = data_frame.at[index, column_name]
+        if pandas.isnull(content):
+            data_frame.set_value(index, column_name, empty_mask)
+        for j in range(0, len(unit_strs)):
+            if str(content).endswith(unit_strs[j]):
+                data_frame.set_value(index, column_name, str(content).replace(unit_strs[j], ''))
+
+        for key in transfer_map.keys():
+            if str(content).endswith(key):
+                content = str(content).replace(key, '')
+                if not (isinstance(content, float) or isinstance(content, int)):
+                    try:
+                        content = float(str(content))
+                    except AttributeError as ae:
+                        print (ae)
+                        continue
+                    except ValueError as ve:
+                        print (ve)
+                        continue
+
+                content = content * transfer_map.get(key)
+                data_frame.set_value(index, column_name, content)
+
+    file_utils.write_file(data_frame, file_utils.check_file_url(dst_file_url), file_name,
+                          sheet_name='Sheet', index=False)
+    return
+
+def mark_invalid_num_data(file_name, column_name, operator, thresh_value, error_mask=-1,
+                          file_url=clean_data_temp_file_url, dst_file_url=clean_data_temp_file_url):
+    data_frame = file_utils.read_file_to_df(file_url, file_name)
+    for index in range(0, len(data_frame)):
+        content = data_frame.at[index, column_name]
+        if not (isinstance(content, float) or isinstance(content, int)):
+            try:
+                content = float(str(content))
+            except AttributeError as ae:
+                print (ae)
+                continue
+            except ValueError as ve:
+                print (ve)
+                continue
+
+        isvalid = True
+        if operator == '<':
+            isvalid = not (content < thresh_value)
+        elif operator == '>':
+            isvalid = not (content > thresh_value)
+        elif operator == '>=':
+            isvalid = not (content >= thresh_value)
+        elif operator == '<=':
+            isvalid = not (content <= thresh_value)
+
+        if not isvalid:
+            data_frame.set_value(index, column_name, error_mask)
+
+    file_utils.write_file(data_frame, file_utils.check_file_url(dst_file_url), file_name,
+                          sheet_name='Sheet', index=False)
+    return
+
+def empty_value_handle_share_exchange_info():
+    """
+    Dirty value handle for table 年报-股东股权转让.xlsx.
     First we'll drop rows that empty value is too many.
-    ['企业经营状态','从业人数','是否有网站或网点','企业是否有投资信息或购买其他公司股权',
-        '有限责任公司本年度是否发生股东股权转','是否提供对外担保']
-    Once there are more than 3 empties in these 6 columns we will drop that row.
+    ['变更前股权比例','变更后股权比例','年报年份','股权变更日期']
+    Once there are more than 2 empties in these 4 columns we will drop that row.
     Then we check nulls column by column and decide how to process with it.
     Next we should numeric all the value for future process.
     After these are done, it's time to work out features we can use in this table which belongs
         to exploratory data analysis.
 
     -----------------------------
-    注册资本
+    变更前股权比例
     ------
-    Based on the primary analysis data, we can drop column 注册资本 which empty percentage is 88%
+    Empty percentage is 0.3939%(17 out of 4316). We replace them as -1.
+    The format is not uniformed. Some are formatted as '.07%', some are '0.07%' and some are '0.07'. We need to drop '%'
+    and make all format as '0.07'. For numbers greater than 1, we mark them as -1.
+
     -----------------------------
-    企业经营状态
+    变更后股权比例
     ------
-    Empty percentage is 0%(1 out of 14862).
-    8 status this value has, they are ['停业','其他','存续','开业','开业/正常经营','歇业','正常开业','清算'].
-    We just add another status for the empty value:'Unknown'.
-    And based on the counts for every status, we simplify these status to ['正常经营','非正常经营','Unknown']
-    ['开业','开业/正常经营','正常开业'] belongs to '正常经营' and ['停业','其他','存续','歇业','清算'] belongs to '非正常经营'.
-    So we can map these total 9 status to three: {'正常经营':0,'非正常经营':1,'Unknown':-1}.
+    Empty percentage is 0.278%(12 out of 4316). We replace them as -1.
+    The format is not uniformed. Some are formatted as '.07%', some are '0.07%' and some are '0.07'. We need to drop '%'
+    and make all format as '0.07'. For numbers greater than 1, we mark them as -1.
+    A more complicate problem is some value are actually belong to '股权变更日期', which we need to copy them to column
+    '股权变更日期'
+
     -----------------------------
-    从业人数
+    股权变更日期
     ------
-    Empty percentage is 0%(0 out of 14862), and some value end with '人' while some are pure number.
-    But also there are lots of value valued '企业选择不公示'(11623) and a few valued '人' without number.
-    For empty value, we replace with -1 indicating there's no value(be careful here, we don't trigger them as -1 people,
-        -1 here works as a status). Those end with '人', we simply drop '人'. Those valued '企业选择不公示',
-        we replace it as number 0 which also works as a status, there's 8 '0人's in the original value but
-        shouldn't matter.
-    -----------------------------
-    是否有网站或网点
-    ------
-    Empty percentage is 0%(0 out of 14862).
-    There are 4 status here:['否','无','是','有'], and ['否','无'] should belong to 'No', ['是','有'] belong to 'Yes'.
-    -----------------------------
-    企业是否有投资信息或购买其他公司股权
-    ------
-    Empty percentage is 0.02%(3 out of 14862).
-    There are 4 status here:['否','无','是','有'], and ['否','无'] should belong to 'No', ['是','有'] belong to 'Yes'.
-    Empty value will be mapped to 'Unknown'.
-    -----------------------------
-    有限责任公司本年度是否发生股东股权转
-    ------
-    Empty percentage is 0.013%(2 out of 14862).
-    There are 4 status here:['否','无','是','有'], and ['否','无'] should belong to 'No', ['是','有'] belong to 'Yes'.
-    Empty value will be mapped to 'Unknown'.
-    -----------------------------
-    是否提供对外担保
-    ------
-    Empty percentage is 0.075%(11 out of 14862).
-    There are 2 status here:['否','是'], we map them to ['No', 'Yes'].
-    Empty value will be mapped to 'Unknown'.
-    -----------------------------
-    发布日期
-    ------
-    Empty percentage is 0%(0 out of 14862).
-    And it's well formatted, so without any process on this column.
+    Empty percentage is 0.3939%(17 out of 4316). The empty value are replaced to the invalid value('1000-01-01')
+    so we can handle it later.
+    Others are well formatted with format yyyy-mm-dd.
 
     -----------------------------
     年报年份
     ------
-    Empty percentage is 0%(0 out of 14862).
-    And it's well formatted, so without any process on this column.
+    Empty percentage is 0.139%(6 out of 4316). The empty value are replaced to the invalid value('1000')
+    so we can handle it later.
+    Others are well formatted with format yyyy-mm-dd.
+
     -----------------------------
     :return:
     """
-    # EMPTY CHECK
-    empty_check_list = [u'企业经营状态'.encode('utf-8'),
-                        u'从业人数'.encode('utf-8'),
-                        u'是否有网站或网点'.encode('utf-8'),
-                        u'企业是否有投资信息或购买其他公司股权'.encode('utf-8'),
-                        u'有限责任公司本年度是否发生股东股权转'.encode('utf-8'),
-                        u'是否提供对外担保'.encode('utf-8')]
-    dcu.drop_rows_too_many_empty(u'年报-企业基本信息.xlsx', columns=empty_check_list, thresh=3)
-
-    # LIST OUT VALUES AFTER EMPTY ROWS HANDLED
-    panaly.list_category_columns_values([u'年报-企业基本信息'], u'年报-企业基本信息_empty_handled',
+    empty_check_list = [u'变更前股权比例'.encode('utf-8'),
+                        u'变更后股权比例'.encode('utf-8'),
+                        u'年报年份'.encode('utf-8'),
+                        u'股权变更日期'.encode('utf-8')]
+    dcu.drop_rows_too_many_empty(u'年报-股东股权转让.xlsx', columns=empty_check_list, thresh=2)
+    panaly.list_category_columns_values([u'年报-股东股权转让'], u'年报-股东股权转让_empty_handled',
                                         file_url=clean_data_temp_file_url)
 
-    # COLUMNS HANDLE
-    # 注册资本
-    dcu.drop_columns(u'年报-企业基本信息', [u'注册资本'.encode('utf-8')])
+    df = file_utils.read_file_to_df(clean_data_temp_file_url, u'年报-股东股权转让')
+    values = {u'变更前股权比例'.encode('utf-8'): -1, u'变更后股权比例'.encode('utf-8'): -1,
+              u'股权变更日期'.encode('utf-8'): '1000-01-01', u'年报年份'.encode('utf-8'): '1000'}
+    for index in range(0, len(df)):
+        content = df.at[index, u'股权变更日期'.encode('utf-8')]
+        content_b = df.at[index, u'变更后股权比例'.encode('utf-8')]
+        if '-' in str(content_b) and (pandas.isnull(content) or pandas.isna(content)):
+            df.set_value(index, u'股权变更日期'.encode('utf-8'), content_b)
+            df.set_value(index, u'变更后股权比例'.encode('utf-8'), '')
 
-    # 企业经营状态
-    status_normal = [u'开业', u'开业/正常经营', u'正常开业']
-    status_unnormal = [u'停业', u'其他', u'存续', u'歇业', u'清算']
-    status_list = [status_normal, status_unnormal]
-    status_after = [u'正常经营', u'非正常经营', u'Unknown']
-    dcu.merge_status(u'年报-企业基本信息', u'企业经营状态'.encode('utf-8'), status_list, status_after)
+    df = df.fillna(values)
+    file_utils.write_file(df, clean_data_temp_file_url, u'年报-股东股权转让')
 
-    # 从业人数
-    dcu.drop_unit(u'年报-企业基本信息', u'从业人数'.encode('utf-8'), [u'人', u' 人'],
-                  empty_mask=-1)
+    dcu.drop_unit_with_float_format(u'年报-股东股权转让', u'变更前股权比例'.encode('utf-8'), ['%'], empty_mask=-1)
+    dcu.drop_unit_with_float_format(u'年报-股东股权转让', u'变更后股权比例'.encode('utf-8'), ['%'], empty_mask=-1)
 
-    # 是否有网站或网点
-    yn_status_n = [u'否', u'无']
-    yn_status_y = [u'是', u'有']
-    yn_status_list = [yn_status_n, yn_status_y]
-    yn_status_after = ['No', 'Yes']
-
-    dcu.merge_status(u'年报-企业基本信息', u'是否有网站或网点'.encode('utf-8'), yn_status_list, yn_status_after)
-
-    # 企业是否有投资信息或购买其他公司股权
-    dcu.merge_status(u'年报-企业基本信息', u'企业是否有投资信息或购买其他公司股权'.encode('utf-8'), yn_status_list, yn_status_after)
-
-    # 有限责任公司本年度是否发生股东股权转
-    dcu.merge_status(u'年报-企业基本信息', u'有限责任公司本年度是否发生股东股权转'.encode('utf-8'), yn_status_list, yn_status_after)
-
-    # 是否提供对外担保
-    dcu.merge_status(u'年报-企业基本信息', u'是否提供对外担保'.encode('utf-8'), yn_status_list, yn_status_after)
-
-    # 发布日期
-
-    # 年报年份
+    dcu.mark_invalid_num_data(u'年报-股东股权转让', u'变更前股权比例'.encode('utf-8'), '>', 100)
+    dcu.mark_invalid_num_data(u'年报-股东股权转让', u'变更后股权比例'.encode('utf-8'), '>', 100)
 
     return
 ```
