@@ -78,7 +78,7 @@ category_landing_purchase = [u'购地-地块公示',
                              u'购地-房地产大地块出让情况',
                              u'购地-结果公告']
 ```
-接着，我们对每一类的数据进行了去重和初步统计分析，列出了基本统计信息并写入excel表格。
+接着，我们对每一类的数据进行了初步统计分析，列出了基本统计信息并写入excel表格。
 
 ```python
 def read_file_to_df(file_dir, file_name, ext='.xlsx', sheet_name='Sheet'):
@@ -97,27 +97,9 @@ def read_file_to_df(file_dir, file_name, ext='.xlsx', sheet_name='Sheet'):
 
     return pandas.read_excel(file_dir + file_name + ext, sheet_name=sheet_name)
 
-def merge_rows(file_name, keys=None, file_url=working_file_url, dst_file_url=clean_data_temp_file_url):
-    """
-    remove duplicated rows.
-    :param file_name:
-    :param keys:
-    :param file_url:
-    :param dst_file_url: which file folder should store the result
-    :return:
-    """
-
-    data_frame = file_utils.read_file_to_df(file_url, file_name)
-    data_frame = data_frame.drop_duplicates()
-
-    file_utils.write_file(data_frame, file_utils.check_file_url(dst_file_url), file_name,
-                          sheet_name='Sheet', index=False)
-
-    return
-
 def list_file_columns_values(file_name, file_url=working_file_url):
     """
-
+    list a file's columns statistic info.
     :param file_name:
     :param file_url:
     :return:
@@ -166,22 +148,212 @@ def list_file_columns_values(file_name, file_url=working_file_url):
 
 | 专利类型        | 专利类型_count | 授权公告日       | 授权公告日_count | 申请日         | 申请日_count |
 |-------------|------------|-------------|-------------|-------------|-----------|
-| Total Num   | 531724     | Total Num   | 531724      | Total Num   | 531724    |
+| Total Num   | 980360     | Total Num   | 980360      | Total Num   | 980360    |
 | Nan Percent | 0          | Nan Percent | 0           | Nan Percent | 0         |
-| 发明专利        | 93         | 1985-11-28  | 1           | 1987-06-03  | 1         |
-| 发明公布        | 189432     | 1986-10-03  | 1           | 1988-04-13  | 2         |
-| 发明公布更正      | 562        | 1986-10-03­ | 1           | 1989-02-08  | 1         |
-| 发明授权        | 130662     | 1987-07-28  | 1           | 1991-02-20  | 1         |
-| 发明授权更正      | 28         | 1988-04-22  | 1           | 1992-12-09  | 1         |
-| 外观设计        | 45554      | 1989-05-20  | 1           | 1993-08-18  | 1         |
-| 外观设计更正      | 20         | 1989-08-10  | 1           | 1993-08-25  | 1         |
-| 实用新型        | 165325     | 1989-12-18  | 3           | 1993-10-13  | 1         |
-| 实用新型更正      | 48         | 1991-04-05  | 1           | 1993-10-20  | 2         |
-|             |            | ...         | ...         | ...         | ...       |
+| 发明专利        | 107        | 1985-11-28  | 1           | 1987-06-03  | 1         |
+| 发明公布        | 404207     | 1986-10-03  | 1           | 1988-04-13  | 2         |
+| 发明公布更正      | 652        | 1986-10-03­ | 1           | 1989-02-08  | 1         |
+| 发明授权        | 170671     | 1987-07-28  | 1           | 1991-02-20  | 1         |
+| ...         | ...        | ...         | ...         | ...         | ...       |
+
 
 通过列出来的统计信息，我们能进一步分析每个表格有多少个数值，空值比是多少，每个数值的多少等等信息。
 
 ## 数据清洗
+
+根据上一步的初步分析，我们接下来需要做的就是数据清洗。首先是重复数据的删除。
+
+```python
+def merge_rows(file_name, keys=None, file_url=working_file_url, dst_file_url=clean_data_temp_file_url):
+    """
+    remove duplicated rows.
+    :param file_name:
+    :param keys:
+    :param file_url:
+    :param dst_file_url: which file folder should store the result
+    :return:
+    """
+
+    data_frame = file_utils.read_file_to_df(file_url, file_name)
+    data_frame = data_frame.drop_duplicates()
+
+    file_utils.write_file(data_frame, file_utils.check_file_url(dst_file_url), file_name,
+                          sheet_name='Sheet', index=False)
+
+    return
+```
+
+删除重复数据后需要做空值的处理，空值的处理需要依据数据意义以及统计信息来决定是删除、插补还是新建类别。在我们的数据处理中，有很多60-90%空缺的列，我们会采取删除列的操作；另外，有些行重要信息空值过多，我们会采取删除行的操作；其余空缺我们大部分用新建类别来标记是空缺值；我们没有用到插补策略。
+
+```python
+def drop_rows_too_many_empty(file_name, columns, thresh=2, file_url=clean_data_temp_file_url,
+                             dst_file_url=clean_data_temp_file_url):
+    """
+    drop rows that too many values are empty.
+    :param file_name:
+    :param columns: the columns we need to check if it is empty
+    :param thresh: how many empty is 'too many'
+    :param file_url: input file url
+    :param dst_file_url: where to store the result
+    :return:
+    """
+    data_frame = file_utils.read_file_to_df(file_url, file_name)
+    data_frame = data_frame.dropna(subset=columns, thresh=thresh)
+
+    file_utils.write_file(data_frame, file_utils.check_file_url(dst_file_url), file_name,
+                          sheet_name='Sheet', index=False)
+    return
+
+
+def drop_columns(file_name, columns, file_url=clean_data_temp_file_url, dst_file_url=clean_data_temp_file_url):
+    try:
+        data_frame = file_utils.read_file_to_df(file_url, file_name)
+        data_frame = data_frame.drop(columns, axis=1)
+
+        file_utils.write_file(data_frame, file_utils.check_file_url(dst_file_url), file_name,
+                              sheet_name='Sheet', index=False)
+    except ValueError as e:
+        print('except:', e)
+    return
+
+def fillna_with_values():
+    df = file_utils.read_file_to_df(clean_data_temp_file_url, u'作品著作权')
+    values = {u'作品著作权类别'.encode('utf-8'): 9, u'作品著作权登记日期'.encode('utf-8'): '1000-01-01',
+              u'作品著作权创作完成日期'.encode('utf-8'): '1000-01-01', u'作品著作权首次发布日期'.encode('utf-8'): '1000-01-01'}
+    df = df.fillna(values)
+    file_utils.write_file(df, clean_data_temp_file_url, u'作品著作权')
+```
+
+在处理完空值之后，观测到数据中很多格式不统一的地方，诸如日期数据，同一列可能出现‘2019-01-01’、‘19-01-01’、‘2019-01’、‘2019’、‘2019年1月1日’等等不同的表达，一些金额数据也有不同单位，可能是‘1000元’、‘1000人民币’、‘1000元人民币’、‘1000’、‘1000美元’等等，对于这些数据，我们需要将每一列的格式统一，带单位的数据需要将单位去除，并进行必要换算（如美元换算成人民币采用汇率6.7）。
+
+同时，在格式统一的过程中我们注意到一些类别数据分类过多、过散、有重复，如‘作品著作权’表`作品著作权类别`就有`'A 文字'`, `'文字'`, `'文字作品'`这几种相同但表述不同的类别存在。于是，我们采取步骤将这些类别进行再分类，降低类别数。
+
+一份完整的数据清洗示例如下。
+
+```python
+def empty_value_handle_basic_info():
+    """
+    empty_value handle for table 年报-企业基本信息.
+        Dirty value handle for table 年报-企业基本信息.
+    First we'll drop rows that empty value is too many.
+    ['企业经营状态','从业人数','是否有网站或网点','企业是否有投资信息或购买其他公司股权',
+        '有限责任公司本年度是否发生股东股权转','是否提供对外担保']
+    Once there are more than 3 empties in these 6 columns we will drop that row.
+    Then we check nulls column by column and decide how to process with it.
+    Next we should numeric all the value for future process.
+    After these are done, it's time to work out features we can use in this table which belongs
+        to exploratory data analysis.
+
+    -----------------------------
+    注册资本
+    ------
+    Based on the primary analysis data, we can drop column 注册资本 which empty percentage is 88%
+    -----------------------------
+    企业经营状态
+    ------
+    Empty percentage is 0%(1 out of 14862).
+    8 status this value has, they are ['停业','其他','存续','开业','开业/正常经营','歇业','正常开业','清算'].
+    We just add another status for the empty value:'Unknown'.
+    And based on the counts for every status, we simplify these status to ['正常经营','非正常经营','Unknown']
+    ['开业','开业/正常经营','正常开业'] belongs to '正常经营' and ['停业','其他','存续','歇业','清算'] belongs to '非正常经营'.
+    So we can map these total 9 status to three: {'正常经营':0,'非正常经营':1,'Unknown':-1}.
+    -----------------------------
+    从业人数
+    ------
+    Empty percentage is 0%(0 out of 14862), and some value end with '人' while some are pure number.
+    But also there are lots of value valued '企业选择不公示'(11623) and a few valued '人' without number.
+    For empty value, we replace with -1 indicating there's no value(be careful here, we don't trigger them as -1 people,
+        -1 here works as a status). Those end with '人', we simply drop '人'. Those valued '企业选择不公示',
+        we replace it as number 0 which also works as a status, there's 8 '0人's in the original value but
+        shouldn't matter.
+    -----------------------------
+    是否有网站或网点
+    ------
+    Empty percentage is 0%(0 out of 14862).
+    There are 4 status here:['否','无','是','有'], and ['否','无'] should belong to 'No', ['是','有'] belong to 'Yes'.
+    -----------------------------
+    企业是否有投资信息或购买其他公司股权
+    ------
+    Empty percentage is 0.02%(3 out of 14862).
+    There are 4 status here:['否','无','是','有'], and ['否','无'] should belong to 'No', ['是','有'] belong to 'Yes'.
+    Empty value will be mapped to 'Unknown'.
+    -----------------------------
+    有限责任公司本年度是否发生股东股权转
+    ------
+    Empty percentage is 0.013%(2 out of 14862).
+    There are 4 status here:['否','无','是','有'], and ['否','无'] should belong to 'No', ['是','有'] belong to 'Yes'.
+    Empty value will be mapped to 'Unknown'.
+    -----------------------------
+    是否提供对外担保
+    ------
+    Empty percentage is 0.075%(11 out of 14862).
+    There are 2 status here:['否','是'], we map them to ['No', 'Yes'].
+    Empty value will be mapped to 'Unknown'.
+    -----------------------------
+    发布日期
+    ------
+    Empty percentage is 0%(0 out of 14862).
+    And it's well formatted, so without any process on this column.
+
+    -----------------------------
+    年报年份
+    ------
+    Empty percentage is 0%(0 out of 14862).
+    And it's well formatted, so without any process on this column.
+    -----------------------------
+    :return:
+    """
+    # EMPTY CHECK
+    empty_check_list = [u'企业经营状态'.encode('utf-8'),
+                        u'从业人数'.encode('utf-8'),
+                        u'是否有网站或网点'.encode('utf-8'),
+                        u'企业是否有投资信息或购买其他公司股权'.encode('utf-8'),
+                        u'有限责任公司本年度是否发生股东股权转'.encode('utf-8'),
+                        u'是否提供对外担保'.encode('utf-8')]
+    dcu.drop_rows_too_many_empty(u'年报-企业基本信息.xlsx', columns=empty_check_list, thresh=3)
+
+    # LIST OUT VALUES AFTER EMPTY ROWS HANDLED
+    panaly.list_category_columns_values([u'年报-企业基本信息'], u'年报-企业基本信息_empty_handled',
+                                        file_url=clean_data_temp_file_url)
+
+    # COLUMNS HANDLE
+    # 注册资本
+    dcu.drop_columns(u'年报-企业基本信息', [u'注册资本'.encode('utf-8')])
+
+    # 企业经营状态
+    status_normal = [u'开业', u'开业/正常经营', u'正常开业']
+    status_unnormal = [u'停业', u'其他', u'存续', u'歇业', u'清算']
+    status_list = [status_normal, status_unnormal]
+    status_after = [u'正常经营', u'非正常经营', u'Unknown']
+    dcu.merge_status(u'年报-企业基本信息', u'企业经营状态'.encode('utf-8'), status_list, status_after)
+
+    # 从业人数
+    dcu.drop_unit(u'年报-企业基本信息', u'从业人数'.encode('utf-8'), [u'人', u' 人'],
+                  empty_mask=-1)
+
+    # 是否有网站或网点
+    yn_status_n = [u'否', u'无']
+    yn_status_y = [u'是', u'有']
+    yn_status_list = [yn_status_n, yn_status_y]
+    yn_status_after = ['No', 'Yes']
+
+    dcu.merge_status(u'年报-企业基本信息', u'是否有网站或网点'.encode('utf-8'), yn_status_list, yn_status_after)
+
+    # 企业是否有投资信息或购买其他公司股权
+    dcu.merge_status(u'年报-企业基本信息', u'企业是否有投资信息或购买其他公司股权'.encode('utf-8'), yn_status_list, yn_status_after)
+
+    # 有限责任公司本年度是否发生股东股权转
+    dcu.merge_status(u'年报-企业基本信息', u'有限责任公司本年度是否发生股东股权转'.encode('utf-8'), yn_status_list, yn_status_after)
+
+    # 是否提供对外担保
+    dcu.merge_status(u'年报-企业基本信息', u'是否提供对外担保'.encode('utf-8'), yn_status_list, yn_status_after)
+
+    # 发布日期
+
+    # 年报年份
+
+    return
+```
 
 ## 特征提取
 
