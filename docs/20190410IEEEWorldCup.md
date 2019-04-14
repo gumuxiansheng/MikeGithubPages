@@ -512,7 +512,8 @@ def pic_scatter(index_files, category_name, index_file_url=corporation_index_fil
 
 我们总共有3000家企业的数据，但其中44家企业最终并没有评分数据，所以有效训练数据是2956个。最后的测试集是500，我们依据500/2956的比例，在我们2956个训练数据中随机选取了428个数据作为测试集，另外2528个数据为训练集。我们有两种方法来做这个操作，一是随机生成428个数据，并保存，每次训练和测试都是以这个数据集拆分为准，另外一个是在每次训练之前都随机生成训练集和测试集，这样能测试模型稳定性。我们先采用第一种方式来调整参数，然后会以第二种方式来检验稳定性。
 
-1. 
+(1)
+
 ```python
 def generate_random_test_corporates():
     """
@@ -524,9 +525,10 @@ def generate_random_test_corporates():
     print(len(list(set(ran_list))))
     print (sorted(ran_list))
 ```
-2. 
-```python
 
+(2)
+
+```python
 def generate_test_corporates():
     data_frame = fu.read_file_to_df(corporation_index_second_stage_file_url, u'年报-企业基本信息_index')
     corporates = list(data_frame['Unnamed: 0'])
