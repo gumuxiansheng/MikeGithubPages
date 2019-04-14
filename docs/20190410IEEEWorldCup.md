@@ -494,6 +494,57 @@ def pic_scatter(index_files, category_name, index_file_url=corporation_index_fil
 
 ## 初步模型选取
 
+经过筛选，我们的特征已经按类别整理好，如下表所示。
+| Unnamed: 0 | patent_count_total | patent_count_pre_2001 | patent_count_pre_2010 | patent_count_2010-13 | patent_count_2014 | patent_count_2015 | patent_count_2016 | patent_count_2017 | patent_count_2018 | patent_count_2019 | fm_patent_count | wg_patent_count | sy_patent_count | 企业总评分       | int_score | int_score_root |
+|------------|--------------------|-----------------------|-----------------------|----------------------|-------------------|-------------------|-------------------|-------------------|-------------------|-------------------|-----------------|-----------------|-----------------|-------------|-----------|----------------|
+| 1001       | 4                  | 0                     | 4                     | 0                    | 0                 | 0                 | 0                 | 0                 | 0                 | 0                 | 4               | 0               | 0               | 75.37427577 | 75        | 75             |
+| 1002       | 2                  | 0                     | 0                     | 1                    | 0                 | 0                 | 0                 | 0                 | 0                 | 0                 | 1               | 0               | 1               | 79.83012198 | 80        | 79             |
+| 1003       | 1182               | 0                     | 97                    | 419                  | 88                | 83                | 39                | 44                | 75                | 8                 | 168             | 314             | 700             | 78.31826444 | 78        | 78             |
+| ...        | ...                | ...                   | ...                   | ...                  | ...               | ...               | ...               | ...               | ...               | ...               | ...             | ...             | ...             | ...         | ...       | ...            |
+
+其中int_score是根据四舍五入获得的企业总评分整数值，而int_score_root是依据去尾法得到的企业总评分整数值。第一阶段的依据分数分类我们会尝试两种方法，以防在评分过程中会以整数段区分，比如89.9可能和89更接近而不是90。
+
+### 指标引入
+
+在得到各类数据的指标（特征）数据后，我们并没有选择一次性加入所有指标，而是以之前的分表为单位，逐步引入指标。我们首先引入的指标是‘软资产’类的7个表格指标，因为从之前散点图来看，此类数据对评分有较为显著的影响。其次是企业财务信息，然后是年报以及其他。
+
+### 数据拆分
+
+我们总共有3000家企业的数据，但其中44家企业最终并没有评分数据，所以有效训练数据是2956个。最后的测试集是500，我们依据500/2956的比例，在我们2956个训练数据中随机选取了428个数据作为测试集，另外2528个数据为训练集。我们有两种方法来做这个操作，一是随机生成428个数据，并保存，每次训练和测试都是以这个数据集拆分为准，另外一个是在每次训练之前都随机生成训练集和测试集，这样能测试模型稳定性。我们先采用第一种方式来调整参数，然后会以第二种方式来检验稳定性。
+
+```python
+def generate_random_test_corporates():
+    """
+    We separate the hole train data into test data(428)(we delete 8 because of lacking score) and train data(2528),
+    so the test/train = 0.169 which is the final test(500) / train(2956) ratio.
+    :return:
+    """
+    ran_list = random.sample(range(1001, 4001), 428)
+    print(len(list(set(ran_list))))
+    print (sorted(ran_list))
+```
+
+```python
+
+def generate_test_corporates():
+    data_frame = fu.read_file_to_df(corporation_index_second_stage_file_url, u'年报-企业基本信息_index')
+    corporates = list(data_frame['Unnamed: 0'])
+    ran_list = random.sample(range(0, 2956), 428)
+    test_cos = []
+    print(len(list(set(ran_list))))
+    print (sorted(ran_list))
+    for i in ran_list:
+        test_cos.append(corporates[i])
+    return test_cos
+
+
+test_corporates = generate_test_corporates()
+```
+
+### 基础模型测试
+
+分类模型有多种，我们尝试了最为流行的一些分类模型，如随机森林（RF），xgboost，k近邻，也尝试了一些回归模型如线性回归，逻辑回归。在各种模型中，依据RMSE，我们发现随机森林
+
 ## 参数调整
 
 ## 模型调整
