@@ -501,12 +501,12 @@ def pic_scatter(index_files, category_name, index_file_url=corporation_index_fil
 
 经过筛选，我们的特征已经按类别整理好，如下表所示。
 
-| Unnamed: 0 | pa...total | pa..._2010 | pa..._2010-13 | 企业总评分       | int_score | int_score_root |
+| Unnamed: 0 | pa...total | pa..._2010 | pa..._2010-13 | 企业总评分    | int_score | int_score_root |
 |------------|------------|------------|---------------|-------------|-----------|----------------|
-| 1001       | 4                  | 4                     | 0                    | 75.37427577 | 75        | 75             |
-| 1002       | 2                  | 0                     | 1                    | 79.83012198 | 80        | 79             |
-| 1003       | 1182               | 97                    | 419                  | 78.31826444 | 78        | 78             |
-| ...        | ...                | ...                   | ...                  | ...         | ...       | ...            |
+| 1001       | 4          | 4          | 0             | 75.37427577 | 75        | 75             |
+| 1002       | 2          | 0          | 1             | 79.83012198 | 80        | 79             |
+| 1003       | 1182       | 97         | 419           | 78.31826444 | 78        | 78             |
+| ...        | ...        | ...        | ...           | ...         | ...       | ...            |
 
 
 
@@ -558,5 +558,113 @@ test_corporates = generate_test_corporates()
 
 ## 参数调整
 
+通过特征的逐步筛选，我们最后确定了134个特征，来自于10张数据表：
+
+```python
+def generate_dataframe():
+    data_frames = []
+    data_frame1 = fu.read_file_to_df(corporation_index_second_stage_file_url, u'资质认证_index')
+    data_frames.append(data_frame1)
+    data_frame2 = fu.read_file_to_df(corporation_index_second_stage_file_url, u'专利_index')
+    data_frames.append(data_frame2)
+    data_frame3 = fu.read_file_to_df(corporation_index_second_stage_file_url, u'作品著作权_index')
+    data_frames.append(data_frame3)
+    data_frame4 = fu.read_file_to_df(corporation_index_second_stage_file_url, u'软著著作权_index')
+    data_frames.append(data_frame4)
+    # data_frame5 = fu.read_file_to_df(corporation_index_second_stage_file_url, u'项目信息_index')
+    # data_frames.append(data_frame5)
+    # data_frame6 = fu.read_file_to_df(corporation_index_second_stage_file_url, u'产品_index')
+    # data_frames.append(data_frame6)
+    data_frame7 = fu.read_file_to_df(corporation_index_second_stage_file_url, u'商标_index')
+    data_frames.append(data_frame7)
+
+    # data_frame8 = fu.read_file_to_df(corporation_index_second_stage_file_url, u'年报-对外投资信息_index')
+    # data_frames.append(data_frame8)
+    # data_frame9 = fu.read_file_to_df(corporation_index_second_stage_file_url, u'年报-的对外提供保证担保信息_index')
+    # data_frames.append(data_frame9)
+    # data_frame10 = fu.read_file_to_df(corporation_index_second_stage_file_url, u'年报-社保信息_index')
+    # data_frames.append(data_frame10)
+    data_frame11 = fu.read_file_to_df(corporation_index_second_stage_file_url, u'年报-股东股权转让_index')
+    data_frames.append(data_frame11)
+    # data_frame12 = fu.read_file_to_df(corporation_index_second_stage_file_url, u'年报-股东（发起人）及出资信息_index')
+    # data_frames.append(data_frame12)
+
+    # data_frame13 = fu.read_file_to_df(corporation_index_file_url, u'上市信息财务信息-利润表_index')
+    # data_frames.append(data_frame13)
+    data_frame14 = fu.read_file_to_df(corporation_index_file_url, u'上市信息财务信息-成长能力指标_index')  # changed
+    data_frames.append(data_frame14)
+    # data_frame15 = fu.read_file_to_df(corporation_index_file_url, u'上市信息财务信息-财务风险指标_index')
+    # data_frames.append(data_frame15)
+    data_frame16 = fu.read_file_to_df(corporation_index_file_url, u'上市信息财务信息盈利能力指标_index')
+    data_frames.append(data_frame16)
+    # data_frame17 = fu.read_file_to_df(corporation_index_file_url, u'上市信息财务信息资产负债表_index')
+    # data_frames.append(data_frame17)
+    data_frame18 = fu.read_file_to_df(corporation_index_file_url, u'上市信息财务信息运营能力指标_index')
+    data_frames.append(data_frame18)
+    # data_frame19 = fu.read_file_to_df(corporation_index_file_url, u'上市公司财务信息-每股指标_index')
+    # data_frames.append(data_frame19)
+
+    # data_frame20 = fu.read_file_to_df(corporation_index_file_url, u'一般纳税人_index')
+    # data_frames.append(data_frame20)
+    # data_frame21 = fu.read_file_to_df(corporation_index_file_url, u'债券信息_index')
+    # data_frames.append(data_frame21)
+    # data_frame22 = fu.read_file_to_df(corporation_index_file_url, u'工商基本信息表_index')
+    # data_frames.append(data_frame22)
+    data_frame23 = fu.read_file_to_df(corporation_index_file_url, u'招投标_index')  # changed
+    data_frames.append(data_frame23)
+    # data_frame24 = fu.read_file_to_df(corporation_index_file_url, u'海关进出口信用_index')
+    # data_frames.append(data_frame24)
+    # data_frame25 = fu.read_file_to_df(corporation_index_file_url, u'竞品_index')
+    # data_frames.append(data_frame25)
+    # data_frame26 = fu.read_file_to_df(corporation_index_file_url, u'纳税A级年份_index')
+    # data_frames.append(data_frame26)
+    # data_frame27 = fu.read_file_to_df(corporation_index_file_url, u'融资信息_index')
+    # data_frames.append(data_frame27)
+
+    for i in range(0, len(data_frames)):
+        print(i)
+        data_frames[i] = data_frames[i].set_index('Unnamed: 0')
+        if i > 0:
+            try:
+                data_frames[i] = data_frames[i].drop(columns=[u'企业总评分'.encode('utf-8'), 'int_score', 'int_score_root'])
+            except KeyError, ke:
+                print(ke)
+
+    data_frame = data_frames[0]
+    for i in range(1, len(data_frames)):
+        data_frame = data_frame.join(data_frames[i])
+
+    return data_frame
+
+```
+如代码所示，软资产类数据和财务报表数据对最后的评分影响较大。代码里注释掉的数据对我们的预测几乎没有提升作用，反而会加大维度，使模型更复杂，也更不准确。
+初始随机森林算法的参数如下：
+
+```python
+model = RandomForestClassifier(n_estimators=100, random_state=10, n_jobs=-1, max_features=None)
+```
+
+由于我们特征较多，经过调整，我们在下面的参数下得到了较为优良的评分。
+
+```python
+model = RandomForestClassifier(n_estimators=408, random_state=10, n_jobs=-1, max_features=59)
+```
+
+此时我们得到的RMSE大概在3.5左右。
+
 ## 模型调整
 
+### 随机森林+线性回归
+
+在有了初步的模型之后，我们进一步加入了线性回归模型。我们将第一步随机森林的预测值作为新的特征加入到模型中做线性回归，这样我们预测的整数值评分就会映射到连续数值上，结果表明，这一步获得的提升虽然较小，大概在0.005左右，但提升还是很稳定。
+
+```
+RMSE(随机森林) = 3.15866108093
+RMSE(随机森林+线性回归) = 3.15273455281
+```
+
+### 随机森林+随机森林+线性回归
+
+由于我们得到的结果RMSE在3-4之间，我们以3分为一段进行了再次区分，如90-93就都是同一类，因此第一步是以3分为一段进行的评分，得到的预测结果再进行整数的评分，之后再进行线性回归。多加的第一步--以3分为一段分类随机森林--并没有提升模型的预测能力，但较为显著地提升了系统地稳定性，因此，我们的模型最终采取`随机森林+随机森林+线性回归`模式。
+
+## 结果
