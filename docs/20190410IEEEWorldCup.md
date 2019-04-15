@@ -667,4 +667,16 @@ RMSE(随机森林+线性回归) = 3.15273455281
 
 由于我们得到的结果RMSE在3-4之间，我们以3分为一段进行了再次区分，如90-93就都是同一类，因此第一步是以3分为一段进行的评分，得到的预测结果再进行整数的评分，之后再进行线性回归。多加的第一步--以3分为一段分类随机森林--并没有提升模型的预测能力，但较为显著地提升了系统地稳定性，因此，我们的模型最终采取`随机森林+随机森林+线性回归`模式。
 
+```python
+def random_forest_linear_reg(data, target, reg_target, test_data, test_target, features=None):
+    prediction_fit, prediction = random_forest(data, map(divide_num, target), test_data, test_target, features)
+    data = np.c_[data, prediction_fit]
+    test_data = np.c_[test_data, prediction]
+    prediction_fit, prediction = random_forest(data, target, test_data, test_target, features)
+    data = np.c_[data, prediction_fit]
+    test_data = np.c_[test_data, prediction]
+    linear_regression(data, reg_target, test_data, test_target)
+    return
+```
+
 ## 结果
