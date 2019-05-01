@@ -680,3 +680,5 @@ def random_forest_linear_reg(data, target, reg_target, test_data, test_target, f
 ```
 
 ## 结果
+您的RMSE成绩：4.0445
+您的排名：28/308
