@@ -37,18 +37,9 @@ In the early 1990s, the European energy market was highly regulated. The liberal
 
 Investigates the outcomes of **129** M&As that were completed by the **15** largest European electricity producers between **2004** and **2013**.
 
-output-oriented DEA model:
+**output-oriented DEA model**
 
-**inputs**: installed capacity and total operational expenditure 
-**good outputs**: generated electricity 
-**bad outputs**: carbon dioxide (CO2) emissions
-
-![input_output](Monastyrenko2017/img/input_output.png)
-
-
-Malmquist-Luenberger productivity index (MLPI):
-
-a common measure in intertemporal efficiency evaluation.
+**Malmquist-Luenberger productivity index (MLPI)** -- a common measure in intertemporal efficiency evaluation.
 
 ## Data and methodology
 
@@ -66,7 +57,32 @@ a common measure in intertemporal efficiency evaluation.
 3. the acquirer's stake was initially below 50%, but after completion of the acquisition, the stake was 50% or higher.
 
 The total sample is composed of 93 cross-border (72.1%) and 36 domestic (27.9%) deals.
+
 ![sample_pie](Monastyrenko2017/img/sample_pie.png)
 
 European energy firms merged most intensively in 2006 and 2008, whereas the highest share of interna- tional mergers was observed in 2005. In 2004 and 2010, nearly as many domestic as international mergers occurred.
+
 ![ma_timeline](Monastyrenko2017/img/ma_timeline.png)
+
+![ma_repartition](Monastyrenko2017/img/ma_repartition.png)
+
+### DEA
+
+**inputs**: installed capacity and total operational expenditure 
+
+**good outputs**: generated electricity 
+
+**bad outputs**: carbon dioxide (CO2) emissions
+
+![input_output](Monastyrenko2017/img/input_output.png)
+
+***Datasource***:
+1. the energy utility data provided by Enerdata;
+2. PricewaterhouseCoopers (2013)[^PricewaterhouseCoopers2013].
+
+
+
+
+##
+
+[^PricewaterhouseCoopers2013]: PricewaterhouseCoopers, 2013. Climate Change and Electricity: European Carbon Factor, benchmarking of CO2 emissions by Europe’s largest electricity utilities. Les Cahiers du Développement Durable 12th Edition. PwC France.
