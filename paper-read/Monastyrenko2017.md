@@ -2,7 +2,7 @@
 <!--Eco-efficiency outcomes of mergers and acquisitions in the European electricity industry-->
 <!--2019-05-22-->
 
-``` latex
+```
 @article{Monastyrenko2017,
 abstract = {The European electricity industry was recently liberalized. In response, there was a surge of mergers and acquisitions (M{\&}As). This study addresses the effects of M{\&}As on the eco-efficiency of European electricity producers in 2005–2013. The environmental production technology comprises CO2 emissions as an undesirable output. I compute eco-efficiency using data envelopment analysis (DEA) and the Malmquist-Luenberger productivity index, which are both based on radial directional distance function. I observe a decreasing trend in average eco-efficiency, which contradicts the previously documented moderate efficiency gains of liberalization. The effects of M{\&}As are isolated using second-step fractional regression. The domestic horizontal M{\&}As, which are systematically regulated by the European Commission, have no impact. Although one cross-border horizontal deal has a same-year effect of roughly −3{\%}, this effect becomes approximately +1.5{\%} over a two-year timespan. Vertical domestic M{\&}As have a short-run negative impact of 3.6{\%} that does not persist over time. Vertical international M{\&}As reduce the eco-efficiency by 2.1{\%} two years after their completion. Limited evidence suggests that the conglomerate deals are at least not harmful. The policy implication is that the merger regulation should be based on DEA eco-efficiency measures. Regulators should devote more attention to cross-border M{\&}As and particularly to vertical deals.},
 author = {Monastyrenko, Evgenii},
@@ -47,6 +47,8 @@ Investigates the outcomes of **129** M&As that were completed by the **15** larg
 
 **129** M&As panel data for the **15** largest European electricity producers over the **2005–2013** period, **Datasource**: Thomson Reuters SDC Platinum database.
 
+![samples_time](Monastyrenko2017/img/samples_time.png)
+
 ![market_pie](Monastyrenko2017/img/market_pie.png)
 
 *All samples are large EU electricity producer acquires a smaller entity*
@@ -68,21 +70,32 @@ European energy firms merged most intensively in 2006 and 2008, whereas the high
 
 ### DEA
 
-**inputs**: installed capacity and total operational expenditure 
+> **inputs**:
+> 1. installed capacity
+> 2. total operational expenditure 
 
-**good outputs**: generated electricity 
-
-**bad outputs**: carbon dioxide (CO2) emissions
+> **outputs**:
+> 1. **good outputs**: 
+>    * generated electricity
+>
+> 2. **bad outputs**: 
+>    * carbon dioxide (CO2) emissions
 
 ![input_output](Monastyrenko2017/img/input_output.png)
 
-***Datasource***:
-1. the energy utility data provided by Enerdata;
-2. PricewaterhouseCoopers (2013)[^PricewaterhouseCoopers2013].
+> **Datasource:**
+> 1. the energy utility data provided by Enerdata;
+> 2. PricewaterhouseCoopers (2013)[^PricewaterhouseCoopers2013];
+> 3. Thomson One.
 
+![input_output_data](Monastyrenko2017/img/input_output_data.png)
 
+**Tow Approaches:**
+1. **The window DEA approach**
+   The underlying assumption is that the technological frontier does not move within the window.
+2. **Malmquist-Luenberger productivity index (MLPI)**
+   It can be decomposed into technical change (frontier shift -- technical efficiencie) and efficiency change (position relative to the frontier -- allocative efficiencie).
 
-
-##
+---
 
 [^PricewaterhouseCoopers2013]: PricewaterhouseCoopers, 2013. Climate Change and Electricity: European Carbon Factor, benchmarking of CO2 emissions by Europe’s largest electricity utilities. Les Cahiers du Développement Durable 12th Edition. PwC France.
