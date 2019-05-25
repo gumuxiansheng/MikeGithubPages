@@ -94,7 +94,15 @@ European energy firms merged most intensively in 2006 and 2008, whereas the high
 1. **The window DEA approach**
    The underlying assumption is that the technological frontier does not move within the window.
 2. **Malmquist-Luenberger productivity index (MLPI)**
+   *The Malmquist productivity index (MPI):*
+
    It can be decomposed into technical change (frontier shift -- technical efficiencie) and efficiency change (position relative to the frontier -- allocative efficiencie).
+
+   *MLPI*
+
+   Is based on the DDF and incorporates both desirable and undesirable outputs.
+
+![two_approaches](Monastyrenko2017/img/two_approaches.png)
 
 ### Regression Analysis
 
@@ -104,7 +112,7 @@ The appropriate selection of the second-stage estimator should build on the prop
 
 $$
 \begin{aligned} \text {DEAscores}_{i t}=& \alpha_{0}+\alpha_{k} N u m M \& A s_{i t}+\beta_{1} \text {GenToSales}_{i t}+\beta_{2} \text { TwoMergers }_{i t}+\\ &+\beta_{3} \text {TwoCBMergers}_{i t}+\gamma_{1} K / S_{i t}+\gamma_{2} I / K_{i t}+\gamma_{3} Y / S_{i t}+ \\ &+ \gamma_{4} Leverage_{i t}+\gamma_{5}Leverage_{i t}^{2}+\gamma_{6} CurrentRatio_{it}
-\\ &+\gamma_{7}CurrentRatio_{i t}^{2}\\ &+\Sigma \theta_{m} \text {Location}_{i t}+\Sigma_{2005}^{2013} \delta_{t} Y e a r_{t}+\varepsilon_{i t}
+\\ &+\gamma_{7}CurrentRatio_{i t}^{2}\\ &+\Sigma \theta_{m} \text {Location}_{i t}+\Sigma_{2005}^{2013} \delta_{t} Year_{t}+\varepsilon_{i t}
 \end{aligned}
 $$
 
@@ -113,6 +121,25 @@ $$
 
 ## Results and discussion
 
+![results_overlook](Monastyrenko2017/img/results_overlook.png)
+
+### A first look
+
+**DEA result:**
+
+![dea_scores](Monastyrenko2017/img/dea_scores.png)
+
+**MLPI result:**
+
+![MLPI_scores](Monastyrenko2017/img/MLPI_scores.png)
+
+The two methods indicate the similar result: **The sector's technical efficiency declines over the entire period of interest.**
+
+### Distinguishing domestic and cross-border M&As
+
+### Distinguishing among horizontal, vertical, and conglomerate M &As
+
+引用文献
 ---
 
 [^PricewaterhouseCoopers2013]: PricewaterhouseCoopers, 2013. Climate Change and Electricity: European Carbon Factor, benchmarking of CO2 emissions by Europe’s largest electricity utilities. Les Cahiers du Développement Durable 12th Edition. PwC France.
