@@ -20,6 +20,7 @@ volume = {107},
 year = {2017}
 }
 ```
+[toc]
 
 ## Introduction
 
@@ -125,21 +126,52 @@ $$
 
 ### A first look
 
-**DEA result:**
+#### DEA result: 
 
 ![dea_scores](Monastyrenko2017/img/dea_scores.png)
 
-**MLPI result:**
+#### MLPI result:
 
 ![MLPI_scores](Monastyrenko2017/img/MLPI_scores.png)
 
 The two methods indicate the similar result: **The sector's technical efficiency declines over the entire period of interest.**
 
+**2005-2009**   the overall eco-efficiency of the sector, as well as its technical efficiency, decreased consistently. Meanwhile, allocative efficiency has changed ambiguously. 
+
+> *Hypothesize that vertical mergers have a negative impact on eco-efficiency*.
+
+**2010-2013**   aggregate eco-efficiency over the 2010– 2013 period has experienced marginal growth above the 2009 values.
+
+#### NATIONAL REGULATORY models:
+
+![regulatory_results](Monastyrenko2017/img/regulatory_results.png)
+
+> *incentive-based regulation may favor eco-efficiency.*
+
 ### Distinguishing domestic and cross-border M&As
+
+#### merging and non-merging utilities
+
+![box_pic_1](Monastyrenko2017/img/box_pic_1.png)
+
+> * *Mergers and non-mergers have almost identical median scores across the three periods of interest.*
+> * *The mean eco-efficiency of merged firms is marginally higher in the year the deal is completed.*
+> * *The mean and median eco-efficiency values of firms that merged domestically are higher over all periods of interest.*
+
+##### Short-run impact
+
+![short_run_impact](Monastyrenko2017/img/short_run_impact.png)
+
+##### Average partial effects
+
+![average_partial_effects](Monastyrenko2017/img/average_partial_effects.png)
+
+
+> *The results of the fractional regression model suggest that both cross-border and domestic mergers are detrimental to eco-efficiency in the year of their completion.*
 
 ### Distinguishing among horizontal, vertical, and conglomerate M &As
 
-引用文献
+文献
 ---
 
 [^PricewaterhouseCoopers2013]: PricewaterhouseCoopers, 2013. Climate Change and Electricity: European Carbon Factor, benchmarking of CO2 emissions by Europe’s largest electricity utilities. Les Cahiers du Développement Durable 12th Edition. PwC France.
