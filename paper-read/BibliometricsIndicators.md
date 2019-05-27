@@ -233,7 +233,7 @@ $$
 与原始$h$-index相比，$h_{mock}$-index的一个优点是它对引用增加的敏感性。此外，没有引用的出版物将显着降低$h_{mock}$-index，而不会影响$h$-index。 然而，作者还提到了$h_{mock}$-index的一个缺点：考虑到新发表的出版物接受引用会有时间延迟，新发表出版物的增加实际上会降低$h_{mock}$-index。
 
 $$
-h_{mock}=\left(\frac{ {TC_{N}}^{2} }{N}\right)^{\frac{1}{3}}
+h_{mock}=\left(\frac{(TC_{N})^{2} }{N}\right)^{\frac{1}{3}}
 $$
 
 > $h_{mock}=15.05$
