@@ -1,6 +1,7 @@
 # Eco-efficiency outcomes of mergers and acquisitions in the European electricity industry
 <!--Eco-efficiency outcomes of mergers and acquisitions in the European electricity industry-->
 <!--2019-05-22-->
+<!--M&A, DEA, MLPI-->
 
 ```
 @article{Monastyrenko2017,
