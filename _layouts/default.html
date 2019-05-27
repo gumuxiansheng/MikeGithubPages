@@ -37,8 +37,8 @@
     <!-- mermaid END -->
 
     <style>
-        #main_content_wrap>.inner {
-            max-width: 800px;
+        body {
+            font-size: 1.2em;
         }
 
         header a {
@@ -52,6 +52,34 @@
             top: 0;
             right: 0;
             z-index: 0;
+        }
+
+        #main_content_wrap>.inner {
+            max-width: 800px;
+        }
+
+        #main_content_wrap>.inner>h1 {
+            text-align: center;
+            font-size: 46px;
+            margin-bottom: 20px;
+        }
+
+        blockquote {
+            background-color: #eaeaea;
+            padding: 1px 0 1px 20px;
+        }
+
+        pre>.highlight {
+            background-color: white;
+            box-shadow: none;
+            max-height: 400px;
+            margin: 10px;
+        }
+
+        highlighter-rouge {
+            padding: 1px;
+            display: block;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
     </style>
 </head>
