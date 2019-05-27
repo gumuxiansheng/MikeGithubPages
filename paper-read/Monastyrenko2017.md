@@ -112,8 +112,8 @@ The Two stage DEA, allows the computation of eco-efficiency values and the isola
 The appropriate selection of the second-stage estimator should build on the properties of the obtained measures of eco-efficiency.
 
 $$
-\begin{aligned} \text {DEAscores}_{i t}=& \alpha_{0}+\alpha_{k} N u m M \& A s_{i t}+\beta_{1} \text {GenToSales}_{i t}+\beta_{2} \text { TwoMergers }_{i t}+\\ &+\beta_{3} \text {TwoCBMergers}_{i t}+\gamma_{1} K / S_{i t}+\gamma_{2} I / K_{i t}+\gamma_{3} Y / S_{i t}+ \\ &+ \gamma_{4} Leverage_{i t}+\gamma_{5}Leverage_{i t}^{2}+\gamma_{6} CurrentRatio_{it}
-\\ &+\gamma_{7}CurrentRatio_{i t}^{2}\\ &+\Sigma \theta_{m} \text {Location}_{i t}+\Sigma_{2005}^{2013} \delta_{t} Year_{t}+\varepsilon_{i t}
+\begin{aligned} DEAscores_{i t}=& \alpha_{0}+\alpha_{k} N u m M \& A s_{i t}+\beta_{1} GenToSales_{i t}+\beta_{2} TwoMergers_{i t}+\\ &+\beta_{3} TwoCBMergers_{i t}+\gamma_{1} K / S_{i t}+\gamma_{2} I / K_{i t}+\gamma_{3} Y / S_{i t}+ \\ &+ \gamma_{4} Leverage_{i t}+\gamma_{5}Leverage_{i t}^{2}+\gamma_{6} CurrentRatio_{it}
+\\ &+\gamma_{7}CurrentRatio_{i t}^{2}\\ &+\Sigma \theta_{m} Location_{i t}+\Sigma_{2005}^{2013} \delta_{t} Year_{t}+\varepsilon_{i t}
 \end{aligned}
 $$
 
@@ -167,11 +167,28 @@ The two methods indicate the similar result: **The sector's technical efficiency
 ![average_partial_effects](Monastyrenko2017/img/average_partial_effects.png)
 
 
-> *The results of the fractional regression model suggest that both cross-border and domestic mergers are detrimental to eco-efficiency in the year of their completion.*
+> *The results of the fractional regression model suggest that both cross-border and domestic mergers are <font color=red>detrimental</font> to eco-efficiency in the year of their completion.*
 
-### Distinguishing among horizontal, vertical, and conglomerate M &As
+The cross-industry empirical results suggest that, at best, mergers do not impact the acquirers (e.g., Asquith, 1983; Agrawal et al., 1992; Loderer and Martin, 1992), but they are often detrimental (e.g., King et al., 2004; Moeller et al., 2004).
 
-文献
+##### Theoretical Explanation
+
+* **”lemons” for sale**, whereby poorly performing firms are targeted for M & As (e.g., Jensen and Ruback, 1983; Lichtenberg et al., 1987).
+* **deal premium**, Domestic acquirers are less uncertain about the target's future performance than bidders in international mergers.They are more likely to pay a deal premium, which could be in terms of shareholders wealth or firm efficiency. Therefore, domestic acquirers tend to absorb less-efficient targets first.
+* Modern theory is ambiguous on Cross-border M& As:
+  1. newfound access to the country-specific capabilities of a foreign target. -- <font color=green>beneficial</font>
+  2. (a) acquirers could experience greater informational asymmetry. 
+   (b) international bidders face the costs of adapting to the macro- economic, legislative and cultural conditions of the destination country. 
+   (c) acquirers must overcome the increased complexity of coordi- nating with foreign affiliate.
+* **anti-competitive effects**,cross-border mergers can have weaker anti-competitive effects. Because partners in international deals are more remote, their mutual pre-merger competition is lower, which implies lower efficiency alterations following cross-border mergers.
+
+### Distinguishing among horizontal, vertical, and conglomerate M&As
+
+#### Horizontal, Vertical, and Conglomerate M&As
+
+
+
+引用
 ---
 
 [^PricewaterhouseCoopers2013]: PricewaterhouseCoopers, 2013. Climate Change and Electricity: European Carbon Factor, benchmarking of CO2 emissions by Europe’s largest electricity utilities. Les Cahiers du Développement Durable 12th Edition. PwC France.
