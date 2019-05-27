@@ -1,5 +1,6 @@
 ## 2.3.1 Classic citation indicators
-以下指标根据以下指标为山西财经大学2016年sci指标计算
+以下指标根据以下指标为山西财经大学2016年sci指标计算。
+[山西财经大学2016年sci](BibliometricsIndicators/res/山东财经大学sci2016.xls)
 
 **Total citations (TC):**
 
