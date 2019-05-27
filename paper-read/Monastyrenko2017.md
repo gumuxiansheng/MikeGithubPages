@@ -181,7 +181,7 @@ The cross-industry empirical results suggest that, at best, mergers do not impac
 * **”lemons” for sale**, whereby poorly performing firms are targeted for M & As (e.g., Jensen and Ruback, 1983; Lichtenberg et al., 1987).
 * **deal premium**, Domestic acquirers are less uncertain about the target's future performance than bidders in international mergers.They are more likely to pay a deal premium, which could be in terms of shareholders wealth or firm efficiency. Therefore, domestic acquirers tend to absorb less-efficient targets first.
 * Modern theory is ambiguous on Cross-border M& As:
-  1. newfound access to the country-specific capabilities of a foreign target. -- $\color{green}\text {{beneficial}}$
+  1. newfound access to the country-specific capabilities of a foreign target. -- $\color{green}\textsf {{beneficial}}$
   2. (a) acquirers could experience greater informational asymmetry. 
    (b) international bidders face the costs of adapting to the macro- economic, legislative and cultural conditions of the destination country. 
    (c) acquirers must overcome the increased complexity of coordi- nating with foreign affiliate.
