@@ -94,8 +94,10 @@ European energy firms merged most intensively in 2006 and 2008, whereas the high
 
 **Tow Approaches:**
 1. **The window DEA approach**
+   
    The underlying assumption is that the technological frontier does not move within the window.
 2. **Malmquist-Luenberger productivity index (MLPI)**
+   
    *The Malmquist productivity index (MPI):*
 
    It can be decomposed into technical change (frontier shift -- technical efficiencie) and efficiency change (position relative to the frontier -- allocative efficiencie).
@@ -156,7 +158,9 @@ The two methods indicate the similar result: **The sector's technical efficiency
 ![box_pic_1](Monastyrenko2017/img/box_pic_1.png)
 
 > * *Mergers and non-mergers have almost identical median scores across the three periods of interest.*
+> 
 > * *The mean eco-efficiency of merged firms is marginally higher in the year the deal is completed.*
+> 
 > * *The mean and median eco-efficiency values of firms that merged domestically are higher over all periods of interest.*
 
 ##### Short-run impact
