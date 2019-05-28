@@ -473,16 +473,20 @@ def pic_scatter(index_files, category_name, index_file_url=corporation_index_fil
 ```
 
 下图中`co_industry_3`就是一个方差太小的列子，而`products_total`则观察不出目标分数与其关系。
+
 ![co_industry_3](20190410IEEEWorldCup/img/co_industry_3.png)
 ![products_total](20190410IEEEWorldCup/img/products_total.png)
 
 要观察到特征和目标分数之间的关系，一般线性关系是最容易发现的，如下图中`certi_cat_total`就很好的体现了其与分数之间的关系。
+
 ![certi_cat_total](20190410IEEEWorldCup/img/certi_cat_total.png)
 
 而其余的关系一般不如`certi_cat_total`这么明显，向下图`tra_mark_5`，但也能看出关系，这些需要保留。
+
 ![tra_mark_5](20190410IEEEWorldCup/img/tra_mark_5.png)
 
 通过散点图对特征进行了初步筛选后，我们还需要进一步压缩维度。对于相关系数很高的特征，我们可以保留其中一个。这个我们可以通过热点图来直观体现。像下图专利相关特征的热点图。
+
 ![专利](20190410IEEEWorldCup/img/专利.png)
 
 从上图中，我们可以从之前的13个指标中筛选出彼此相关系数不太高的5个指标：
