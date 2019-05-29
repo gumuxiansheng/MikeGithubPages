@@ -153,9 +153,9 @@ The two methods indicate the similar result: **The sector's technical efficiency
 
 ### Distinguishing domestic and cross-border M&As
 
-#### merging and non-merging utilities
+##### Merging and Non-merging Utilities
 
-![box_pic_1](Monastyrenko2017/img/box_pic_1.png)
+![Distribution of eco-efficiency scores with respect to completed domestic and cross-border M& As](Monastyrenko2017/img/box_pic_1.png)
 
 > * *Mergers and non-mergers have almost identical median scores across the three periods of interest.*
 > 
@@ -189,7 +189,53 @@ The cross-industry empirical results suggest that, at best, mergers do not impac
 
 ### Distinguishing among horizontal, vertical, and conglomerate M&As
 
-#### Horizontal, Vertical, and Conglomerate M&As
+![Distribution of eco-efficiency scores with respect to completed Horizontal, Vertical, and Conglomerate M& As.](Monastyrenko2017/img/vertical_horizontal_statistic.png)
+
+> * Horizontal and conglomerate mergers should positively contribute to eco-efficiency. 
+> * Vertical deals should have positive outcomes over the short run. 
+> * In the medium run, vertical cross-border mergers should cause a decline in eco-efficiency. 
+> * In the medium run,  vertical domestic ones should have a positive impact.
+
+The regression results suggest that horizontal domestic mergers do not have any statistically significant effects on eco-efficiency.
+
+![Average partial effects of mergers](Monastyrenko2017/img/average_partial_effects_2.png)
+
+![Short-run and medium-run impact](Monastyrenko2017/img/short_run_impact_2.png)
+
+#### Horizontal
+
+##### Results
+
+> * Horizontal cross-border mergers damage eco-efficiency over the short run.
+> 
+> * Horizontal cross-border mergers start to positively affect eco-efficiency in the medium run.
+
+##### Theoretical Explanation
+
+A delayed-in-time positive effect can be interpreted based on the idea that acquired underperforming lemons later evolve into over- performing "cherries".
+
+
+> By **Blonigen et al. (2014):** *Multinationals aim to acquire promising assets immediately after a negative productivity shock because their price is relatively low at that point. Once the integration of an underperforming energy utility (a lemon) in the production structure is finalized, and it becomes an overperforming cherry.*
+
+#### Vertical
+
+##### Results
+
+> * In general, vertical mergers negatively impact the eco-efficiency of European electricity producers. Vertical domestic mergers are detrimental in the short run.
+> * In the medium run, the effect is no longer statistically significant.
+Thus, domestic and cross-border vertical mergers differ in the timing of their effects.
+
+##### Theoretical Explanation
+
+> **Alfaro et al. (2016)** argued that *the administrative cost of integration is the limiting factor for productivity gains from vertical integration.* 
+#### Conglomerate
+
+##### Results
+
+> * Conglomerate mergers positively impact the **DEA** eco-efficiency. However, the regression results for the **MLPI** do not confirm the statistical significance of conglomerate mergers. Thus, there is limited empirical evidence regarding conglomerate mergers.
+
+
+## Conclusions and policy implications Since
 
 
 
