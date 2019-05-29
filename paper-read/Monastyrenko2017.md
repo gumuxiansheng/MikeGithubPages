@@ -178,7 +178,7 @@ The cross-industry empirical results suggest that, at best, mergers do not impac
 
 ##### Theoretical Explanation
 
-* **”lemons” for sale**, whereby poorly performing firms are targeted for M & As (e.g., Jensen and Ruback, 1983; Lichtenberg et al., 1987).
+* **"lemons" for sale**, whereby poorly performing firms are targeted for M & As (e.g., Jensen and Ruback, 1983; Lichtenberg et al., 1987).
 * **deal premium**, Domestic acquirers are less uncertain about the target's future performance than bidders in international mergers.They are more likely to pay a deal premium, which could be in terms of shareholders wealth or firm efficiency. Therefore, domestic acquirers tend to absorb less-efficient targets first.
 * Modern theory is ambiguous on Cross-border M& As:
   1. newfound access to the country-specific capabilities of a foreign target. -- $\color{green}{\textsf {beneficial}}$
@@ -237,7 +237,19 @@ Thus, domestic and cross-border vertical mergers differ in the timing of their e
 
 ## Conclusions and policy implications Since
 
+> * The results suggest that the average eco-efficiency of the European energy sector decreased over the 2005–2009 period, and this trend accelerated in 2008, possibly because of the global financial crisis. For 2009–2013, eco-efficiency was, on average, at the 2009 level.
 
+> * This study demonstrates that a merger of any type has a detrimental effect on eco-efficiency of 2.24% in the short run and a positive effect of 0.9% in the medium run.
+
+> * The domestic deals are systematically more detrimental than the cross-border deals.
+
+> * Horizontal domestic mergers do not affect eco- efficiency.
+
+> * Horizontal cross-border mergers have negative short-run effects of approximately 3%. However, over the medium run, deals of this type increase eco-efficiency by roughly 1.5%.
+
+> * Conglomerate mergers have positive effects on eco-efficiency.
+
+> * A vertical domestic merger tends to reduce eco-efficiency by approximately 3.6% in the year of its completion. Over the medium term, cross-border vertical mergers reduce eco-efficiency by 2.1%
 
 引用
 ---
