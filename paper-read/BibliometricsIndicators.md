@@ -316,3 +316,20 @@ $$
 其中$c_{f}(j)$是归一化后的引用数。
 
 > $TC_f = 11.63$
+
+**The $n$-index:**
+
+## 2.5 The time factor consideration for bibliometric indicators
+
+**The $m$ quotient:**
+
+**The $h$-rate**
+
+**The $AR$-index**
+
+**The $h^c$-, $h^t$- and $h^{ad}$- indices**
+
+**Seniority-independent Hirsch-type index**
+
+## 2.6 Indicators mainly reflecting new insights of publications
+The logic of this approach may be that if more references are found in a paper, there is a higher chance for this paper to make more significant new progress, although one could also argue that it may have higher chance to receive more citations. W-year relative synchronous reference factor is simply defined as the average references of publications in a w-year evaluation window for a given research unit.
