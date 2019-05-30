@@ -228,6 +228,7 @@ Thus, domestic and cross-border vertical mergers differ in the timing of their e
 ##### Theoretical Explanation
 
 > **Alfaro et al. (2016)** argued that *the administrative cost of integration is the limiting factor for productivity gains from vertical integration.* 
+
 #### Conglomerate
 
 ##### Results
