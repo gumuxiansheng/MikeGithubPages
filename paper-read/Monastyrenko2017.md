@@ -21,7 +21,37 @@ volume = {107},
 year = {2017}
 }
 ```
-[toc]
+
+- [Eco-efficiency outcomes of mergers and acquisitions in the European electricity industry](#eco-efficiency-outcomes-of-mergers-and-acquisitions-in-the-european-electricity-industry)
+  - [Introduction](#introduction)
+    - [Background](#background)
+    - [Literature review](#literature-review)
+    - [Intro](#intro)
+  - [Data and methodology](#data-and-methodology)
+    - [M&As](#mas)
+    - [DEA](#dea)
+    - [Regression Analysis](#regression-analysis)
+  - [Results and discussion](#results-and-discussion)
+    - [A first look](#a-first-look)
+      - [DEA result:](#dea-result)
+      - [MLPI result:](#mlpi-result)
+      - [NATIONAL REGULATORY models:](#national-regulatory-models)
+    - [Distinguishing domestic and cross-border M&As](#distinguishing-domestic-and-cross-border-mas)
+        - [Merging and Non-merging Utilities](#merging-and-non-merging-utilities)
+        - [Short-run impact](#short-run-impact)
+        - [Average partial effects](#average-partial-effects)
+        - [Theoretical Explanation](#theoretical-explanation)
+    - [Distinguishing among horizontal, vertical, and conglomerate M&As](#distinguishing-among-horizontal-vertical-and-conglomerate-mas)
+      - [Horizontal](#horizontal)
+        - [Results](#results)
+        - [Theoretical Explanation](#theoretical-explanation-1)
+      - [Vertical](#vertical)
+        - [Results](#results-1)
+        - [Theoretical Explanation](#theoretical-explanation-2)
+      - [Conglomerate](#conglomerate)
+        - [Results](#results-2)
+  - [Conclusions and policy implications Since](#conclusions-and-policy-implications-since)
+  - [引用](#%E5%BC%95%E7%94%A8)
 
 ## Introduction
 
