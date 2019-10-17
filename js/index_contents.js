@@ -30,16 +30,14 @@ fs.readdir('./paper-read/', function (error, files) {
 function modifyList(folder) {
     let content = fs.readFileSync('./index.html');
     $ = cheerio.load(content);
-    let dom = $('#contents');
-    dom.empty();
     let containername = '';
     if (folder == 'docs'){
         containername = 'ol_container';
     } else {
         containername = 'ln_container';
     }
-    let ul = `<ol id="${containername}" class="container"></ol>`;
-    dom.append(ul);
+    let dom = $(`#${containername}`);
+    dom.empty();
     let container = $(`#${containername}`);
 
 
