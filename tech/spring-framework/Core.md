@@ -202,7 +202,7 @@ Within the container itself, these bean definitions are represented as `BeanDefi
 This metadata translates to a set of properties that make up each bean definition. 
 
 | Property                 | Explained in…​           |
-|--------------------------|--------------------------|
+| ------------------------ | ------------------------ |
 | Class                    | Instantiating Beans      |
 | Name                     | Naming Beans             |
 | Scope                    | Bean Scopes              |
@@ -413,4 +413,349 @@ The Spring container validates the configuration of each bean as the container i
 > One possible solution is to edit the source code of some classes to be configured by setters rather than constructors. Alternatively, avoid constructor injection and use setter injection only. In other words, although it is not recommended, you can configure circular dependencies with setter injection.
 >
 >Unlike the typical case (with no circular dependencies), a circular dependency between bean A and bean B forces one of the beans to be injected into the other prior to being fully initialized itself (a classic chicken-and-egg scenario).
+
+If no circular dependencies exist, when one or more collaborating beans are being injected into a dependent bean, each collaborating bean is totally configured prior to being injected into the dependent bean.
+
+##### Lazy-initialized Beans
+
+By default, `ApplicationContext` implementations eagerly create and configure all singleton beans as part of the initialization process. You can prevent pre-instantiation of a singleton bean by marking the bean definition as being lazy-initialized. A lazy-initialized bean tells the IoC container to create a bean instance when it is first requested, rather than at startup.
+
+##### Autowiring Collaborators
+
+The Spring container can autowire relationships between collaborating beans. You can let Spring resolve collaborators (other beans) automatically for your bean by inspecting the contents of the `ApplicationContext`. 
+
+The following table describes the four autowiring modes:
+
+| Mode          | Explanation                                                                                                                                                                                                                                                                                                                                          |
+| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `no`          | (Default) No autowiring. Bean references must be defined by `ref` elements. Changing the default setting is not recommended for larger deployments, because specifying collaborators explicitly gives greater control and clarity. To some extent, it documents the structure of a system\.                                                          |
+| `byName`      | Autowiring by property name. Spring looks for a bean with the same name as the property that needs to be autowired. For example, if a bean definition is set to autowire by name and it contains a `master` property (that is, it has a `setMaster(..)` method), Spring looks for a bean definition named `master` and uses it to set the property\. |
+| `byType`      | Lets a property be autowired if exactly one bean of the property type exists in the container\. If more than one exists, a fatal exception is thrown, which indicates that you may not use `byType` autowiring for that bean\. If there are no matching beans, nothing happens (the property is not set)\.                                           |
+| `constructor` | Analogous to `byType` but applies to constructor arguments\. If there is not exactly one bean of the constructor argument type in the container, a fatal error is raised\.                                                                                                                                                                           |
+
+###### Limitations and Disadvantages of Autowiring
+
+Autowiring works best when it is used consistently across a project. If autowiring is not used in general, it might be confusing to developers to use it to wire only one or two bean definitions.
+
+Consider the limitations and disadvantages of autowiring:
+
+- Explicit dependencies in `property` and `constructor-arg` settings always override autowiring. You cannot autowire simple properties such as primitives, `Strings`, and `Classes` (and arrays of such simple properties). This limitation is by-design.
+
+- Autowiring is less exact than explicit wiring. Although, as noted in the earlier table, Spring is careful to avoid guessing in case of ambiguity that might have unexpected results. The relationships between your Spring-managed objects are no longer documented explicitly.
+
+- Wiring information may not be available to tools that may generate documentation from a Spring container.
+
+- Multiple bean definitions within the container may match the type specified by the setter method or constructor argument to be autowired. For arrays, collections, or `Map` instances, this is not necessarily a problem. However, for dependencies that expect a single value, this ambiguity is not arbitrarily resolved. If no unique bean definition is available, an exception is thrown.
+
+In the latter scenario, you have several options:
+
+- Abandon autowiring in favor of explicit wiring.
+
+- Avoid autowiring for a bean definition by setting its `autowire-candidate` attributes to false.
+
+- Designate a single bean definition as the primary candidate by setting the primary attribute of its `<bean/>` element to true.
+
+- Implement the more fine-grained control available with annotation-based configuration, as described in Annotation-based Container Configuration.
+
+##### Method Injection
+
+You can make bean A aware of the container by implementing the `ApplicationContextAware` interface, and by making a `getBean("B")` call to the container ask for (a typically new) bean B instance every time bean A needs it. The following example shows this approach:
+
+```java
+public interface ApplicationContextAware extends Aware {
+  void setApplicationContext(ApplicationContext paramApplicationContext) throws BeansException;
+}
+```
+
+```java
+// a class that uses a stateful Command-style class to perform some processing
+package fiona.apple;
+
+// Spring-API imports
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+
+public class CommandManager implements ApplicationContextAware {
+
+    private ApplicationContext applicationContext;
+
+    public Object process(Map commandState) {
+        // grab a new instance of the appropriate Command
+        Command command = createCommand();
+        // set the state on the (hopefully brand new) Command instance
+        command.setState(commandState);
+        return command.execute();
+    }
+
+    protected Command createCommand() {
+        // notice the Spring API dependency!
+        return this.applicationContext.getBean("command", Command.class);
+    }
+
+    public void setApplicationContext(
+            ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
+    }
+}
+```
+
+###### Lookup Method Injection
+
+Lookup method injection is the ability of the container to override methods on container-managed beans and return the lookup result for another named bean in the container. The Spring Framework implements this method injection by using bytecode generation from the **CGLIB library** to dynamically generate a subclass that overrides the method.
+
+```java
+public abstract class CommandManager {
+
+    public Object process(Object commandState) {
+        Command command = createCommand();
+        command.setState(commandState);
+        return command.execute();
+    }
+
+    @Lookup("myCommand")
+    protected abstract Command createCommand();
+}
+```
+
+### Bean Scopes
+
+When you create a bean definition, you create a **recipe** for creating actual instances of the class defined by that bean definition. The idea that a bean definition is a recipe is important, because it means that, as with a class, you can create many object instances from a single recipe.
+
+You can control not only the various dependencies and configuration values that are to be plugged into an object that is created from a particular bean definition but also **control the scope of the objects created from a particular bean definition**.
+
+| Scope         | Description                                                                                                                                                                                                                                                      |
+| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `singleton`   | (Default) Scopes a single bean definition to a single object instance for each Spring IoC container\.                                                                                                                                                            |
+| `prototype`   | Scopes a single bean definition to any number of object instances\.                                                                                                                                                                                              |
+| `request`     | Scopes a single bean definition to the lifecycle of a single HTTP request\. That is, each HTTP request has its own instance of a bean created off the back of a single bean definition\. Only valid in the context of a web\-aware Spring `ApplicationContext`\. |
+| `session`     | Scopes a single bean definition to the lifecycle of an HTTP `Session`\. Only valid in the context of a web\-aware Spring `ApplicationContext`\.                                                                                                                  |
+| `application` | Scopes a single bean definition to the lifecycle of a `ServletContext`\. Only valid in the context of a web\-aware Spring `ApplicationContext`\.                                                                                                                 |
+| `websocket`   | Scopes a single bean definition to the lifecycle of a `WebSocket`\. Only valid in the context of a web\-aware Spring `ApplicationContext`\.                                                                                                                      |
+
+#### The Singleton Scope
+
+Only one shared instance of a singleton bean is managed, and all requests for beans with an ID or IDs that match that bean definition result in that one specific bean instance being returned by the Spring container.
+
+![Singleton Scope Bean](docImg/2020-07-28-09-09-19.png)
+
+Spring’s concept of a singleton bean **differs from the singleton pattern** as defined in the Gang of Four (GoF) patterns book. The GoF singleton hard-codes the scope of an object such that one and only one instance of a particular class is created per ClassLoader. The scope of the Spring singleton is best described as being **per-container and per-bean**. This means that, if you define one bean for a particular class in a single Spring container, the Spring container creates one and only one instance of the class defined by that bean definition. The singleton scope is the default scope in Spring. 
+
+#### The Prototype Scope
+
+The non-singleton prototype scope of bean deployment results in the creation of a new bean instance every time a request for that specific bean is made. That is, the bean is injected into another bean or you request it through a getBean() method call on the container. As a rule, you should use the prototype scope for all stateful beans and the singleton scope for stateless beans.
+
+![Prototype Scope Bean](docImg/2020-07-28-09-13-13.png)
+
+In contrast to the other scopes, **Spring does not manage the complete lifecycle of a prototype bean**. The container instantiates, configures, and otherwise assembles a prototype object and hands it to the client, with no further record of that prototype instance. Thus, although initialization lifecycle callback methods are called on all objects regardless of scope, in the case of prototypes, configured destruction lifecycle callbacks are not called. The client code must clean up prototype-scoped objects and release expensive resources that the prototype beans hold. 
+
+#### Request, Session, Application, and WebSocket Scopes
+
+The `request`, `session`, `application`, and `websocket` scopes are available only if you use a web-aware Spring `ApplicationContext` implementation (such as `XmlWebApplicationContext`). If you use these scopes with regular Spring IoC containers, such as the `ClassPathXmlApplicationContext`, an `IllegalStateException` that complains about an unknown bean scope is thrown.
+
+### Customizing the Nature of a Bean
+
+The Spring Framework provides a number of interfaces you can use to customize the nature of a bean.
+
+- Lifecycle Callbacks
+
+- `ApplicationContextAware` and `BeanNameAware`
+
+- Other `Aware` Interfaces
+
+#### Lifecycle Callbacks
+
+To interact with the container’s management of the bean lifecycle, you can implement the Spring `InitializingBean` and `DisposableBean` interfaces. The container calls `afterPropertiesSet()` for the former and `destroy()` for the latter to let the bean perform certain actions upon initialization and destruction of your beans.
+
+> The JSR-250 `@PostConstruct` and `@PreDestroy` annotations are generally considered best practice for receiving lifecycle callbacks in a modern Spring application. Using these annotations means that your beans are not coupled to Spring-specific interfaces.
+> If you do not want to use the JSR-250 annotations but you still want to remove coupling, consider `init-method` and `destroy-method` bean definition metadata.
+
+We recommend that you do not use the `InitializingBean` interface and `DisposableBean` interface, because it unnecessarily couples the code to Spring. Alternatively, we **suggest using the `@PostConstruct` annotation and `@PreDestroy` annotation or specifying a POJO initialization and destroy method**. An example shown below.
+
+###### 1. Spring `InitializingBean` and `DisposableBean` interfaces
+
+```xml
+<bean id="exampleInitBean" class="examples.ExampleBean"/>
+```
+
+```java
+public class ExampleBean implements InitializingBean, DisposableBean {
+
+    @Override
+    public void afterPropertiesSet() {
+        // do some initialization work
+    }
+
+    @Override
+    public void destroy() {
+        // do some destruction work (like releasing pooled connections)
+    }
+}
+```
+
+###### 2. `@PostConstruct` and `@PreDestroy` annotations
+
+```java
+public class CachingMovieLister {
+
+    @PostConstruct
+    public void populateMovieCache() {
+        // populates the movie cache upon initialization...
+    }
+
+    @PreDestroy
+    public void clearMovieCache() {
+        // clears the movie cache upon destruction...
+    }
+}
+```
+> Like `@Resource`, the `@PostConstruct` and `@PreDestroy` annotation types were a part of the standard Java libraries from JDK 6 to 8. However, **the entire javax.annotation package got separated from the core Java modules in JDK 9 and eventually removed in JDK 11**. If needed, the javax.annotation-api artifact needs to be obtained via Maven Central now, simply to be added to the application’s classpath like any other library.
+
+###### 3. `init-method` and `destroy-method` bean definition metadata:
+
+```xml
+<bean id="exampleInitBean" class="examples.ExampleBean" init-method="init" destroy-method="cleanup"/>
+```
+
+```java
+public class ExampleBean {
+
+    public void init() {
+        // do some initialization work
+    }
+
+    public void cleanup() {
+        // do some destruction work (like releasing pooled connections)
+    }
+}
+```
+
+Multiple lifecycle mechanisms configured for the same bean, with different initialization methods, are called as follows:
+
+1. Methods annotated with `@PostConstruct`
+2. `afterPropertiesSet()` as defined by the `InitializingBean` callback interface
+3. A custom configured `init()` method
+
+Destroy methods are called in the same order:
+
+1. Methods annotated with `@PreDestroy`
+2. `destroy()` as defined by the `DisposableBean` callback interface
+3. A custom configured `destroy()` method
+
+
+
+##### Startup and Shutdown Callbacks
+
+The `Lifecycle` interface defines the essential methods for any object that has its own lifecycle requirements (such as starting and stopping some background process):
+
+```java
+public interface Lifecycle {
+
+    void start();
+
+    void stop();
+
+    boolean isRunning();
+}
+```
+
+Any Spring-managed object may implement the `Lifecycle` interface. Then, when the `ApplicationContext` itself receives start and stop signals (for example, for a stop/restart scenario at runtime), it cascades those calls to all `Lifecycle` implementations defined within that context. It does this by delegating to a `LifecycleProcessor`.
+
+```java
+public interface LifecycleProcessor extends Lifecycle {
+
+    void onRefresh();
+
+    void onClose();
+}
+```
+
+An example of `LifecycleProcessor` is `DefaultLifecycleProcessor`.
+
+```java
+package org.springframework.context.support;
+
+// other imports
+
+public class DefaultLifecycleProcessor
+  implements LifecycleProcessor, BeanFactoryAware
+{
+    // ...
+
+    public void start() {
+        startBeans(false);
+        this.running = true;
+    }
+
+    public void stop() {
+        stopBeans();
+        this.running = false;
+    }
+
+    
+    public void onRefresh() {
+        startBeans(true);
+        this.running = true;
+    }
+
+    
+    public void onClose() {
+        stopBeans();
+        this.running = false;
+    }
+    // ...
+
+    private void startBeans(boolean autoStartupOnly) {
+        Map<String, Lifecycle> lifecycleBeans = getLifecycleBeans();
+
+        // handle Lifecycle beans' start()
+
+    }
+
+    private void stopBeans() {
+        Map<String, Lifecycle> lifecycleBeans = getLifecycleBeans();
+
+        // handle Lifecycle beans' stop()
+
+    }
+
+    protected Map<String, Lifecycle> getLifecycleBeans() {
+        ConfigurableListableBeanFactory beanFactory = getBeanFactory();
+        Map<String, Lifecycle> beans = new LinkedHashMap<>();
+        String[] beanNames = beanFactory.getBeanNamesForType(Lifecycle.class, false, false);
+        for (String beanName : beanNames) {
+        String beanNameToRegister = BeanFactoryUtils.transformedBeanName(beanName);
+        boolean isFactoryBean = beanFactory.isFactoryBean(beanNameToRegister);
+        String beanNameToCheck = isFactoryBean ? ("&" + beanName) : beanName;
+        if ((beanFactory.containsSingleton(beanNameToRegister) && (!isFactoryBean || 
+            matchesBeanType(Lifecycle.class, beanNameToCheck, (BeanFactory)beanFactory))) || 
+            matchesBeanType(SmartLifecycle.class, beanNameToCheck, (BeanFactory)beanFactory)) {
+            Object bean = beanFactory.getBean(beanNameToCheck);
+            if (bean != this && bean instanceof Lifecycle) {
+            beans.put(beanNameToRegister, (Lifecycle)bean);
+            }
+        } 
+        } 
+        return beans;
+    }
+}
+```
+
+#### `ApplicationContextAware` and `BeanNameAware`
+
+When an `ApplicationContext` creates an object instance that implements the `org.springframework.context.ApplicationContextAware` interface, the instance is provided with a reference to that `ApplicationContext`. Thus, beans can programmatically manipulate the `ApplicationContext` that created them, through the `ApplicationContext` interface or by casting the reference to a known subclass of this interface (such as `ConfigurableApplicationContext`, which exposes additional functionality).
+
+**Autowiring** is another alternative to obtain a reference to the `ApplicationContext`. The *traditional* `constructor` and `byType` autowiring modes can provide a dependency of type `ApplicationContext` for a constructor argument or a setter method parameter, respectively. 
+
+When an `ApplicationContext` creates a class that implements the `org.springframework.beans.factory.BeanNameAware` interface, the class is provided with a reference to the name defined in its associated object definition. 
+
+### Container Extension Points
+
+#### Customizing Beans by Using a BeanPostProcessor
+
+The `BeanPostProcessor` interface defines callback methods that you can implement to provide your own (or override the container’s default) instantiation logic, dependency resolution logic, and so forth. If you want to implement some custom logic after the Spring container finishes instantiating, configuring, and initializing a bean, you can plug in one or more custom `BeanPostProcessor` implementations.
+
+An `ApplicationContext` automatically detects any beans that are defined in the configuration metadata that implements the `BeanPostProcessor` interface(not all `BeanFactory`s, e.g. `ConfigurableBeanFactory` need to invoke `addBeanPostProcessor` method to register a `BeanPostProcessor`. `ApplicationContext` do auto registration through  `PostProcessorRegistrationDelegate`). The `ApplicationContext` registers these beans as post-processors so that they can be called later, upon bean creation. Bean post-processors can be deployed in the container in the same fashion as any other beans.
+
+
 
