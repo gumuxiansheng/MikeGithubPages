@@ -944,3 +944,180 @@ A default lenient embedded value resolver is provided by Spring. It will try to 
 
 When `@Value` contains a `SpEL` expression the value will be dynamically computed at runtime.
 
+#### @PostConstruct and @PreDestroy
+
+The `CommonAnnotationBeanPostProcessor` not only recognizes the `@Resource` annotation but also the JSR-250 lifecycle annotations: `javax.annotation.PostConstruct` and `javax.annotation.PreDestroy`. Introduced in Spring 2.5, the support for these annotations offers an alternative to the lifecycle callback mechanism.
+
+### Classpath Scanning and Managed Components
+
+This section describes an option for implicitly detecting the candidate components by scanning the classpath. **Candidate components are classes that match against a filter criteria and have a corresponding bean definition registered with the container.** This removes the need to use XML to perform bean registration. Instead, you can use **annotations** (for example, `@Component`), **AspectJ type expressions**, or your own **custom filter criteria** to select which classes have bean definitions registered with the container.
+
+#### @Component and Further Stereotype Annotations
+
+`@Component` is a generic stereotype for any Spring-managed component. `@Repository`, `@Service`, and `@Controller` are specializations of `@Component` for more specific use cases (in the persistence, service, and presentation layers, respectively). 
+
+#### Using Meta-annotations and Composed Annotations
+
+Many of the annotations provided by Spring can be used as meta-annotations in your own code. A meta-annotation is an annotation that can be applied to another annotation. 
+
+```java
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Component // 1
+public @interface Service {
+
+    // ...
+}
+
+// 1. The Component causes @Service to be treated in the same way as @Component.
+
+```
+
+You can also combine meta-annotations to create “composed annotations”. For example, the `@RestController` annotation from Spring MVC is composed of `@Controller` and `@ResponseBody`.
+
+#### Automatically Detecting Classes and Registering Bean Definitions
+
+To autodetect stereotyped classes and register corresponding BeanDefinition instances, you need to add `@ComponentScan` to your `@Configuration` class, where the basePackages attribute is a common parent package for the two classes.
+
+The `AutowiredAnnotationBeanPostProcessor` and `CommonAnnotationBeanPostProcessor` are both implicitly included when you use the component-scan element. That means that the two components are autodetected and wired together — all without any bean configuration metadata provided in XML.
+
+> In a Spring Boot project, we typically set the main application class with the `@SpringBootApplication` annotation. Under the hood, `@SpringBootApplication` is a composition of the `@Configuration`,  `@ComponentScan`, and `@EnableAutoConfiguration` annotations. With this default setting, Spring Boot will auto scan for components in the current package (containing the `@SpringBoot` main class) and its sub packages.
+
+#### Using Filters to Customize Scanning
+
+By default, classes annotated with `@Component`, `@Repository`, `@Service`, `@Controller`, `@Configuration`, or a custom annotation that itself is annotated with `@Component` are the only detected candidate components. However, you can modify and extend this behavior by applying custom filters. Add them as includeFilters or excludeFilters attributes of the `@ComponentScan` annotation (or as `<context:include-filter />` or `<context:exclude-filter />` child elements of the `<context:component-scan>` element in XML configuration). Each filter element requires the type and expression attributes. The following table describes the filtering options:
+
+| Filter Type            | Example Expression            | Description                                                                                     |
+|------------------------|-------------------------------|-------------------------------------------------------------------------------------------------|
+| annotation (default) | `org.example.SomeAnnotation`  | An annotation to be *present* or *meta\-present* at the type level in target components\.           |
+| assignable             | `org.example.SomeClass`       | A class (or interface) that the target components are assignable to (extend or implement)\. |
+| aspectj                | `org.example..*Service+`   | An AspectJ type expression to be matched by the target components\.                             |
+| regex                  | `org\.example\.Default.*` | A regex expression to be matched by the target components' class names\.                        |
+| custom                 | `org.example.MyTypeFilter`    | A custom implementation of the `org.springframework.core.type.TypeFilter` interface\.         |
+
+#### Defining Bean Metadata within Components
+
+`@Bean` is a **method-level** annotation and a direct analog of the XML `<bean/>` element. The annotation supports some of the attributes offered by `<bean/>`, such as: * `init-method` * `destroy-method` * `autowiring` * `name`.
+
+You can use the `@Bean` annotation in a `@Configuration`-annotated or in a `@Component`-annotated class.
+
+```java
+@Component
+public class FactoryMethodComponent {
+
+    @Bean
+    @Qualifier("public")
+    public TestBean publicInstance() {
+        return new TestBean("publicInstance");
+    }
+
+    public void doWork() {
+        // Component method implementation omitted
+    }
+}
+```
+
+The `@Bean` methods in a regular Spring `@Component` are processed differently than their counterparts inside a Spring `@Configuration` class. The difference is that **`@Component` classes are not enhanced with CGLIB to intercept the invocation of methods and fields.** CGLIB proxying is the means by which invoking methods or fields within `@Bean` methods in `@Configuration` classes creates bean metadata references to collaborating objects. Such methods are not invoked with normal Java semantics but rather go through the container in order to provide the usual lifecycle management and proxying of Spring beans, even when referring to other beans through programmatic calls to `@Bean` methods. In contrast, invoking a method or field in a `@Bean` method within a plain `@Component` class has standard Java semantics, with no special CGLIB processing or other constraints applying.
+
+```java
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Component
+public @interface Configuration {
+
+    @AliasFor(annotation = Component.class)
+    String value() default "";
+
+    /**
+     * Specify whether {@code @Bean} methods should get proxied in order to enforce
+     * bean lifecycle behavior.
+     */
+    boolean proxyBeanMethods() default true;
+
+}
+```
+
+#### Naming Autodetected Components
+
+When a component is autodetected as part of the scanning process, its bean name is generated by the BeanNameGenerator strategy known to that scanner. By default, any Spring stereotype annotation (`@Component`, `@Repository`, `@Service`, and `@Controller`) that contains a name value thereby provides that name to the corresponding bean definition.
+
+If such an annotation contains no name value or for any other detected component (such as those discovered by custom filters), the default bean name generator returns the uncapitalized non-qualified class name.
+
+#### Providing a Scope for Autodetected Components
+
+As with Spring-managed components in general, the default and most common scope for autodetected components is `singleton`. However, sometimes you need a different scope that can be specified by the `@Scope` annotation. You can provide the name of the scope within the annotation.
+
+### Using JSR 330 Standard Annotations
+
+Starting with Spring 3.0, Spring offers support for JSR-330 standard annotations (Dependency Injection). Those annotations are scanned in the same way as the Spring annotations. To use them, you need to have the relevant jars(`javax.inject`) in your classpath.
+
+#### Dependency Injection with @Inject and @Named
+
+`@Inject` is analog to `@Autowired`. As with `@Autowired`, you can use `@Inject` at the field level, method level and constructor-argument level. Furthermore, you may declare your injection point as a `javax.inject.Provider`, allowing for on-demand access to beans of shorter scopes or lazy access to other beans through a `Provider.get()` call. 
+
+If you would like to use a qualified name for the dependency that should be injected, you should use the `@Named` annotation.
+
+#### @Named and @ManagedBean: Standard Equivalents to the @Component Annotation
+
+Instead of `@Component`, you can use `@javax.inject.Named` or `javax.annotation.ManagedBean`, as the following example shows:
+
+```java
+import javax.inject.Inject;
+import javax.inject.Named;
+
+@Named("movieListener")  // @ManagedBean("movieListener") could be used as well
+public class SimpleMovieLister {
+
+    private MovieFinder movieFinder;
+
+    @Inject
+    public void setMovieFinder(MovieFinder movieFinder) {
+        this.movieFinder = movieFinder;
+    }
+
+    // ...
+}
+```
+
+```java
+import javax.inject.Inject;
+import javax.inject.Named;
+
+@Named
+public class SimpleMovieLister {
+
+    private MovieFinder movieFinder;
+
+    @Inject
+    public void setMovieFinder(MovieFinder movieFinder) {
+        this.movieFinder = movieFinder;
+    }
+
+    // ...
+}
+```
+
+> In contrast to `@Component`, the JSR-330 `@Named` and the JSR-250 `@ManagedBean` annotations are **not composable**. You should use Spring’s stereotype model for building custom component annotations.
+
+#### Limitations of JSR-330 Standard Annotations
+
+| Spring                | javax\.inject\.\*     | javax\.inject restrictions / comments                                                                                                                                                                                                                                                                                                                                                                                                           |
+|-----------------------|-----------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| @Autowired            | @Inject               | @Inject has no 'required' attribute\. Can be used with Java 8’s Optional instead\.                                                                                                                                                                                                                                                                                                                                                              |
+| @Component            | @Named / @ManagedBean | JSR\-330 does not provide a composable model, only a way to identify named components\.                                                                                                                                                                                                                                                                                                                                                         |
+| @Scope("singleton") | @Singleton            | The JSR\-330 default scope is like Spring’s prototype\. However, in order to keep it consistent with Spring’s general defaults, a JSR\-330 bean declared in the Spring container is a singleton by default\. In order to use a scope other than singleton, you should use Spring’s @Scope annotation\. javax\.inject also provides a @Scope annotation\. Nevertheless, this one is only intended to be used for creating your own annotations\. |
+| @Qualifier            | @Qualifier / @Named   | javax\.inject\.Qualifier is just a meta\-annotation for building custom qualifiers\. Concrete String qualifiers (like Spring’s @Qualifier with a value) can be associated through javax\.inject\ Named\.                                                                                                                                                                                                                                      |
+| @Value                | \-                    | no equivalent                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| @Required             | \-                    | no equivalent                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| @Lazy                 | \-                    | no equivalent                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| ObjectFactory         | Provider              | javax\.inject\.Provider is a direct alternative to Spring’s ObjectFactory, only with a shorter get() method name\. It can also be used in combination with Spring’s @Autowired or with non\-annotated constructors and setter methods\.                                                                                                                                                                                                       |
+
+### Java-based Container Configuration
+
+#### Basic Concepts: @Bean and @Configuration
+
+The central artifacts in Spring’s new Java-configuration support are `@Configuration`-annotated classes and `@Bean`-annotated methods.
+
+The `@Bean` annotation is used to indicate that a method instantiates, configures, and initializes a new object to be managed by the Spring IoC container. For those familiar with Spring’s `<beans/>` XML configuration, the `@Bean` annotation plays the same role as the `<bean/>` element. You can use `@Bean`-annotated methods with any Spring `@Component`. **However, they are most often used with `@Configuration` beans**.
