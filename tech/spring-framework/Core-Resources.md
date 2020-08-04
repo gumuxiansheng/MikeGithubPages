@@ -182,3 +182,5 @@ ApplicationContext ctx = new ClassPathXmlApplicationContext(
 
 #### Wildcards in Application Context Constructor Resource Paths
 
+The resource paths in application context constructor values may be simple paths (as shown earlier), each of which has a one-to-one mapping to a target `Resource` or, alternately, may contain **the special "classpath*:" prefix** or internal **Ant-style regular expressions** (matched by using Spring’s PathMatcher utility). Both of the latter are effectively **wildcards**.
+
