@@ -184,7 +184,7 @@ parser.parseExpression("Officers['advisors'][0].PlaceOfBirth.Country").setValue(
 // evaluates to a Java list containing the four numbers
 List numbers = (List) parser.parseExpression("{1,2,3,4}").getValue(context);
 
-List listOfLists = (List) parser.parseExpression("{{'a','b'},{'x','y'}}").getValue(context);
+List listOfLists = (List) parser.parseExpression("{ {'a','b'},{'x','y'} }").getValue(context);
 ```
 
 `{}` by itself means an empty list. For performance reasons, if the list is itself entirely composed of fixed literals, a constant list is created to represent the expression (rather than building a new list on each evaluation).
