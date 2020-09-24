@@ -251,6 +251,34 @@ To rule out possible endogeneity threats, we performed the two-stage least-squar
 
 ## DISCUSSION AND CONCLUSION
 
+### Implications for Theory
+
+Our study provides evidence that overcoming home-country-based disadvantages can be an important antecedent of foreign subsidiary autonomy delegation.
+
+Moreover, our findings suggest that even when the analysis is from the perspective of the MNE, delegating greater subsidiary autonomy can be a central issue.
+
+Although we are not examining different EMNE subsidiary roles, we could extend our findings to stipulate that EMNEs often set up flagship subsidiaries, which act as strategic enablers for EMNEs by performing three key functions.
+
+> Thus, although the concept of subsidiary autonomy is not new, the conceptualization of a flagship subsidiary as a strategic enabler to an EMNE brings out a new strategic function of autonomous subsidiaries, deserving greater future investigation.
+
+### Implications for Practice
+
+For established MNEs it is important to understand the organizational mechanisms that underpin EMNEs’ international expansion
+
+For EMNEs, it is important to acknowledge the important role of subsidiary autonomy in overcoming their disadvantages in the global marketplace, and in fulfilling their long-term strategy for improved global competitiveness.
+
+### Limitations and Future Directions
+
+1. We derive our empirical results from a sample of Chi- nese firms, thus raising the concern that the findings might be country-specific. A multiple-country research project can indicate better the extent to which subsidiary autonomy delegation is systematic across the factors we have identified.
+2. Although we focus on autonomy delegation’s positive implications for EMNEs, it could be difficult to implement or be counterproductive when the subsidiary and the parent are not well integrated (Luo, 1999). Future research in this area could explore both the costs and the benefits of subsidiary autonomy, at both the early and late stages of this process.
+3. whereas by examining autonomy delegation we focus on formal structural control, informal (e.g., normative, cultural, or social) coordination and control are also important, and should also be the subject of further exploration in the EMNE context.
+4. Autonomy design is not static, but evolutionary. Therefore longitudinal mapping out and analysis of the changes in decision-making structure over time are warranted.
+5. This paper examines subsidiary autonomy as a single-dimensional construct, which could be a limitation. Autonomy can be domain-specific, and hence multidimensional.
+6. We did not measure perceptions of domestic institutional heritage.
+
+### Conclusion
+
+We advance the idea that subsidiary autonomy is a strategic mechanism to overcome home-country- based firm disadvantages. In so doing, we uncover new antecedents, and discuss a new function of subsidiary autonomy. In addition, we build on and extend existing EMNE perspectives to focus on postentry organizational mechanisms. Although this study represents only an initial attempt into an important area of research, it is our hope that it will prompt future investigation that will direct the field toward a more comprehensive understanding of subsidiary autonomy.
 
 
 [^RedVariable]: Red variables are from survey.
